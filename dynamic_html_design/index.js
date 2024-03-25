@@ -1,6 +1,5 @@
 import { ArticleManager, ArticleRenderer } from "../articles/index.module.js";
-import _articles from "../data/articles.json" with { type: "json" };
-
+import { articles as _articles } from "../articles/export.js";
 /**********************Scroll Animation "END"************************************/
 
 (async () => {

@@ -1,15 +1,14 @@
 import { useHeadTitle } from "../composables/index.js";
 import { Article, ArticleRenderer, ArticleManager } from "./index.module.js";
 import { AsideRenderer } from "../renderer.module.js";
-import _articles from "../data/articles.json" with { type: "json" };
-import categories from "../data/categories.json" with { type: "json" };
-import tags from "../data/tags.json" with { type: "json" };
+import { articles as _articles, categories, tags } from "../exports.js";
 
 (async () => {
   const rootContainer = document.querySelector("article");
 
   const getTagURL = (tag) => `../tags/index.html?id=${tag}`;
-  const getCategoryURL = (category) => `../categories/index.html?id=${category}`;
+  const getCategoryURL = (category) =>
+    `../categories/index.html?id=${category}`;
   const getArticleURL = (article) => `index.html?id=${article.id}`;
 
   // January 1, 2023
@@ -27,12 +26,16 @@ import tags from "../data/tags.json" with { type: "json" };
       ${article.title}
     </h1>
     <!-- Post meta content-->
-    <div class="text-muted fst-italic mb-2">Posted on ${article.getFormattedDate()} by ${article.author}</div>
+    <div class="text-muted fst-italic mb-2">Posted on ${article.getFormattedDate()} by ${
+      article.author
+    }</div>
     <!-- Post categories-->
     ${article.categories
       .map(
         (category) =>
-          `<a class="badge bg-secondary text-decoration-none link-light me-1 d-inline-block" href="${getCategoryURL(category)}">${category}</a>`
+          `<a class="badge bg-secondary text-decoration-none link-light me-1 d-inline-block" href="${getCategoryURL(
+            category
+          )}">${category}</a>`
       )
       .join("")}
     `;
@@ -48,14 +51,34 @@ import tags from "../data/tags.json" with { type: "json" };
     footer.className = "article-footer";
     footer.innerHTML = `
     <!-- tags -->
-    ${article.tags ? `<div class="article-tags">${article.tags.map((tag) => `<a href="${getTagURL(tag)}"># ${tag}</a>`).join("")}</div>` : ""}
+    ${
+      article.tags
+        ? `<div class="article-tags">${article.tags
+            .map((tag) => `<a href="${getTagURL(tag)}"># ${tag}</a>`)
+            .join("")}</div>`
+        : ""
+    }
     <div class="article-nav">
       <div class="article-nav-item">
-        ${prevArticle ? `<a href="${getArticleURL(prevArticle)}"><i class="fa fa-chevron-left fa-xs"></i>${prevArticle.title}</a>` : ""}
+        ${
+          prevArticle
+            ? `<a href="${getArticleURL(
+                prevArticle
+              )}"><i class="fa fa-chevron-left fa-xs"></i>${
+                prevArticle.title
+              }</a>`
+            : ""
+        }
       </div>
       <div class="article-nav-item">
         <a href="#!">
-          ${nextArticle ? `<a href="${getArticleURL(nextArticle)}">${nextArticle.title}<i class="fa fa-chevron-right fa-xs"></i></a>` : ""}
+          ${
+            nextArticle
+              ? `<a href="${getArticleURL(nextArticle)}">${
+                  nextArticle.title
+                }<i class="fa fa-chevron-right fa-xs"></i></a>`
+              : ""
+          }
         </a>
       </div>
     `;
@@ -64,7 +87,6 @@ import tags from "../data/tags.json" with { type: "json" };
     rootContainer.appendChild(section);
     rootContainer.appendChild(footer);
   }
-
 
   const articleManager = new ArticleManager(_articles);
   const articles = articleManager.articles;

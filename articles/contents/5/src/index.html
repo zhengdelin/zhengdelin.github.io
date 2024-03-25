@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="zh-tw">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>表單範例</title>
+    <link rel="stylesheet" href="./index.css" />
+  </head>
+  <body>
+    <div class="container">
+      <div class="form">
+        <h1>表單範例</h1>
+        <form action="#" method="post">
+          <div>
+            <label for="name">姓名：</label>
+            <input type="text" id="name" name="name" placeholder="請輸入姓名" required />
+          </div>
+          <div>
+            <label for="interests">興趣：</label>
+            <select id="interests" name="interests[]" multiple required>
+              <option value="reading">閱讀</option>
+              <option value="music">音樂</option>
+              <option value="sports">運動</option>
+              <option value="traveling">旅遊</option>
+            </select>
+          </div>
+          <div>
+            <label for="education">學制：</label>
+            <select id="education" name="education" required>
+              <option value="五專">五專</option>
+              <option value="二技">二技</option>
+              <option value="四技">四技</option>
+            </select>
+          </div>
+          <div>
+            <label>性別：</label>
+            <div>
+              <input type="radio" id="male" name="gender" value="male" required />
+              <label for="male">男</label>
+            </div>
+            <div>
+              <input type="radio" id="female" name="gender" value="female" />
+              <label for="female">女</label>
+            </div>
+            <div>
+              <input type="radio" id="other" name="gender" value="other" />
+              <label for="other">其他</label>
+            </div>
+          </div>
+          <div>
+            <label>專業：</label>
+            <div>
+              <input type="checkbox" id="it" name="profession[]" value="it" />
+              <label for="it">資訊科技</label>
+            </div>
+            <div>
+              <input type="checkbox" id="engineering" name="profession[]" value="engineering" />
+              <label for="engineering">工程學</label>
+            </div>
+            <div>
+              <input type="checkbox" id="business" name="profession[]" value="business" />
+              <label for="business">商業</label>
+            </div>
+            <div>
+              <input type="checkbox" id="arts" name="profession[]" value="arts" />
+              <label for="arts">藝術</label>
+            </div>
+          </div>
+          <button type="submit">提交</button>
+        </form>
+      </div>
+
+      <div class="result"></div>
+    </div>
+
+    <script src="./index.js"></script>
+  </body>
+</html>

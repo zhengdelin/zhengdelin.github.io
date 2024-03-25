@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>online editor</title>
+
+    <!-- editor -->
+    <link rel="stylesheet" data-name="vs/editor/editor.main" href="./node_modules/monaco-editor/min/vs/editor/editor.main.css" />
+
+    <!-- fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Roboto+Mono:ital,wght@0,100..700;1,100..700&display=swap" rel="stylesheet" />
+
+    <!-- css -->
+    <link rel="stylesheet" href="./index.css" />
+  </head>
+  <body>
+    123
+    <div class="container">
+      <div class="left-side">
+        <div class="btns">
+          <button id="open-directory-btn" class="btn btn-primary">開啟資料夾</button>
+        </div>
+        <div class="workspace"></div>
+      </div>
+      <div class="right-side">
+        <div class="right-top-side">
+          <div class="tabs"></div>
+        </div>
+        <div class="right-bottom-side">
+          <div class="code-space"></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- monaco-editor -->
+    <script>
+      var require = { paths: { vs: "./node_modules/monaco-editor/min/vs" } };
+    </script>
+    <script src="./node_modules/monaco-editor/min/vs/loader.js"></script>
+    <script src="./node_modules/monaco-editor/min/vs/editor/editor.main.nls.js"></script>
+    <script src="./node_modules/monaco-editor/min/vs/editor/editor.main.js"></script>
+
+    <!-- utils -->
+    <script src="./data-structure/tree.js"></script>
+    <script src="./utils/eventEmitter.js"></script>
+    <script src="./utils/debounce.js"></script>
+
+    <!-- main code -->
+    <script src="./layout.js"></script>
+    <script src="./workspace.js"></script>
+    <script src="./codeSpace.js"></script>
+    <script src="./shortcutEvents.js"></script>
+  </body>
+</html>

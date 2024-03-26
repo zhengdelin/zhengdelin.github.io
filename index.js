@@ -3,6 +3,7 @@ import { Article, ArticleManager } from "./articles/index.module.js";
 import { arrayChunk } from "./utils/array.js";
 import { usePaginatedData } from "./composables/index.js";
 import { categories, tags, articles as _articles } from "./exports.js";
+import { PaginationRenderer } from "./renderer.module.js";
 
 (async () => {
   const getArticleURL = (article) => `./articles/index.html?id=${article.id}`;
@@ -22,14 +23,30 @@ import { categories, tags, articles as _articles } from "./exports.js";
 
   const articlesContainer = document.querySelector("#articles");
   const page = new URL(location.href).searchParams.get("page");
-  const paginatedData = usePaginatedData(articles, Number(page || 1), 5);
+  const paginatedData = usePaginatedData(
+    articles,
+    Number(page || 1),
+    5,
+    (page) => {
+      location.href = `./index.html?page=${page}`;
+    }
+  );
 
-  console.log("paginatedData :>> ", paginatedData);
   if (!paginatedData.items.length) {
     return;
   }
   renderArticles(paginatedData.items);
-  renderPagination(paginatedData, (page) => `./index.html?page=${page}`);
+
+  const nav = document.createElement("nav");
+  articlesContainer.appendChild(nav);
+  const hr = document.createElement("hr");
+  nav.appendChild(hr);
+  const paginationRenderer = new PaginationRenderer(nav);
+
+  paginationRenderer.renderPagination(
+    paginatedData,
+    (page) => `./index.html?page=${page}`
+  );
   /**
    *
    * @param {Article} article
@@ -81,42 +98,5 @@ import { categories, tags, articles as _articles } from "./exports.js";
         _create(article2, row);
       }
     }
-  }
-
-  /**
-   * @param {ReturnType<typeof usePaginatedData>} data
-   * @param {(number) => string} getPageUrl
-   */
-  function renderPagination(data, getPageUrl) {
-    const nav = document.createElement("nav");
-    nav.setAttribute("aria-label", "Pagination");
-    console.log("data :>> ", data);
-    nav.innerHTML = `
-    <hr class="my-0" />
-    <ul class="pagination justify-content-center my-4">
-        <li class="page-item ${
-          !data.hasPrevPage ? "disabled" : ""
-        }"><a class="page-link" href="${getPageUrl(
-      data.currentPage - 1
-    )}" tabindex="-1" aria-disabled="${!data.hasPrevPage}">上一頁</a></li>
-        ${Array.from({ length: data.pageCount })
-          .map((_, i) => {
-            const idx = i + 1;
-            return `<li class="page-item ${
-              idx === data.currentPage ? "active" : ""
-            }"><a class="page-link" href="${getPageUrl(idx)}">${idx}</a></li>`;
-          })
-          .join("")}
-        <!--<li class="page-item disabled"><a class="page-link" href="#!">...</a></li>
-        <li class="page-item"><a class="page-link" href="#!">15</a></li>-->
-        <li class="page-item ${
-          !data.hasNextPage ? "disabled" : ""
-        }"><a class="page-link" href="${getPageUrl(
-      data.currentPage + 1
-    )}" aria-disabled="${!data.hasNextPage}">下一頁</a></li>
-    </ul>
-    `;
-
-    articlesContainer.appendChild(nav);
   }
 })();

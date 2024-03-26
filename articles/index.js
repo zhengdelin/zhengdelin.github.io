@@ -11,39 +11,50 @@ import { articles as _articles, categories, tags } from "../exports.js";
     `../categories/index.html?id=${category}`;
   const getArticleURL = (article) => `index.html?id=${article.id}`;
 
-  // January 1, 2023
-  /**
-   *
-   * @param {Article} article
-   */
-  async function renderArticle(article) {
+  function createArticleHeader(article) {
     const header = document.createElement("header");
     header.classList.add("mb-4");
-    header.innerHTML = `
-    <!-- Post title-->
-    <h1 class="fw-bolder mb-1">
-      <a href="index.html"><i class="fa fa-chevron-left fa-xs"></i></a>
-      ${article.title}
-    </h1>
-    <!-- Post meta content-->
-    <div class="text-muted fst-italic mb-2">Posted on ${article.getFormattedDate()} by ${
-      article.author
-    }</div>
-    <!-- Post categories-->
-    ${article.categories
-      .map(
-        (category) =>
-          `<a class="badge bg-secondary text-decoration-none link-light me-1 d-inline-block" href="${getCategoryURL(
-            category
-          )}">${category}</a>`
-      )
-      .join("")}
-    `;
 
+    const fragment = document.createDocumentFragment();
+
+    const h1 = document.createElement("h1");
+    const icon = document.createElement("i");
+    icon.className = "fa fa-chevron-left fa-xs me-2 cursor-pointer link";
+    icon.onclick = () => history.back();
+    h1.appendChild(icon);
+    h1.appendChild(document.createTextNode(article.title));
+
+    const metaContent = document.createElement("div");
+    metaContent.classList.add("text-muted", "fst-italic", "mb-2");
+    metaContent.textContent = `Posted on ${article.getFormattedDate()} by ${
+      article.author
+    }`;
+
+    const categories = article.categories.map((category) => {
+      const a = document.createElement("a");
+      a.href = getCategoryURL(category);
+      a.className =
+        "badge bg-secondary text-decoration-none link-light me-1 d-inline-block";
+      a.textContent = category;
+      return a;
+    });
+
+    fragment.appendChild(h1);
+    fragment.appendChild(metaContent);
+    categories.forEach((category) => fragment.appendChild(category));
+
+    header.appendChild(fragment);
+    return header;
+  }
+
+  async function createArticleSection(article) {
     const section = document.createElement("section");
     section.classList.add("mb-5");
     section.innerHTML = await article.getContent();
+    return section;
+  }
 
+  function createArticleFooter(article) {
     const prevArticle = articles[articles.indexOf(article) - 1];
     const nextArticle = articles[articles.indexOf(article) + 1];
 
@@ -82,6 +93,19 @@ import { articles as _articles, categories, tags } from "../exports.js";
         </a>
       </div>
     `;
+
+    return footer;
+  }
+
+  // January 1, 2023
+  /**
+   *
+   * @param {Article} article
+   */
+  async function renderArticle(article) {
+    const header = createArticleHeader(article);
+    const section = await createArticleSection(article);
+    const footer = createArticleFooter(article);
 
     rootContainer.appendChild(header);
     rootContainer.appendChild(section);

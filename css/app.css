@@ -1,4 +1,4 @@
-/***CSS Animations****/
+<i class="fa fa-chevron-left fa-xs"></i>/***CSS Animations****/
 @charset "UTF-8";
 
 /* Animation Delay */
@@ -2127,10 +2127,14 @@ use-head {
   display: none;
 }
 
-/* .link {
+.link {
   color: var(--bs-link-color);
 }
 
 .link:hover {
   color: var(--bs-link-hover-color);
-} */
+}
+
+.cursor-pointer{
+  cursor: pointer;
+}

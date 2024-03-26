@@ -36,7 +36,16 @@ class Article {
    *
    * @param {ArticleAddArgs} param0
    */
-  constructor({ id, title, date, type = "html", filename, tags = [], categories = [], description = "" }) {
+  constructor({
+    id,
+    title,
+    date,
+    type = "html",
+    filename,
+    tags = [],
+    categories = [],
+    description = "",
+  }) {
     this.id = id;
     this.title = title;
     this.description = description;
@@ -122,6 +131,19 @@ class ArticleManager {
     return this.articlesMap[id];
   }
 
+  get articleCountsByCategory() {
+    const counts = {};
+    for (const article of this.articles) {
+      for (const category of article.categories) {
+        if (!counts[category]) {
+          counts[category] = 0;
+        }
+        counts[category]++;
+      }
+    }
+    return counts;
+  }
+
   filterArticles({ tag, category, keyword }, strict = false) {
     const filterFuncs = [];
     if (tag) {
@@ -131,9 +153,15 @@ class ArticleManager {
       filterFuncs.push((article) => article.categories.includes(category));
     }
     if (keyword) {
-      filterFuncs.push((article) => article.title.includes(keyword) || article.description.includes(keyword));
+      filterFuncs.push(
+        (article) =>
+          article.title.includes(keyword) ||
+          article.description.includes(keyword)
+      );
     }
-    return this.articles.filter((article) => filterFuncs[strict ? "every" : "some"]((func) => func(article)));
+    return this.articles.filter((article) =>
+      filterFuncs[strict ? "every" : "some"]((func) => func(article))
+    );
   }
 
   getArticlesByTag(tag) {
@@ -186,12 +214,18 @@ class ArticleRenderer {
                 <div class="timeline-content">
                   <div class="date">
                     <p>${article.date.getDate()}</p>
-                    <small>${formatTime(article.date, "W", { locale: "en" })}</small>
+                    <small>${formatTime(article.date, "W", {
+                      locale: "en",
+                    })}</small>
                   </div>
                   <div class="body">
                     <h2 class="timeline-title">${article.title}</h2>
-                    ${article.description ? `<p>${article.description}</p>` : ""}
-                    <a class="read-more" href="${getArticleURL(article)}">閱讀更多</a>
+                    ${
+                      article.description ? `<p>${article.description}</p>` : ""
+                    }
+                    <a class="read-more" href="${getArticleURL(
+                      article
+                    )}">閱讀更多</a>
                   </div>
 
                   <!-- <div class="timeline-media">
@@ -227,7 +261,9 @@ class ArticleRenderer {
       const yearMonth = formatTime(article.date, "MMM yyyy", { locale: "en" });
       if (lastYearMonth !== yearMonth) {
         lastYearMonth = yearMonth;
-        timeline.appendChild(ArticleRenderer.createTimelineDateTitle(yearMonth));
+        timeline.appendChild(
+          ArticleRenderer.createTimelineDateTitle(yearMonth)
+        );
         isRight = false;
       }
 
@@ -235,10 +271,14 @@ class ArticleRenderer {
         row = document.createElement("div");
         row.classList.add("row");
         timeline.appendChild(row);
-        row.appendChild(ArticleRenderer.createTimelineItem(article, isRight, getArticleURL));
+        row.appendChild(
+          ArticleRenderer.createTimelineItem(article, isRight, getArticleURL)
+        );
         isRight = true;
       } else {
-        row.appendChild(ArticleRenderer.createTimelineItem(article, isRight, getArticleURL));
+        row.appendChild(
+          ArticleRenderer.createTimelineItem(article, isRight, getArticleURL)
+        );
         isRight = false;
       }
     }

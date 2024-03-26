@@ -92,10 +92,18 @@ import { useHead } from "./composables/index.js";
     </button>
     <div class="collapse navbar-collapse" id="navbarSupportedContent">
       <ul class="navbar-nav ms-auto mb-2 mb-lg-0">
-        <li class="nav-item"><a class="nav-link" data-id="index" href="${getHref("index.html")}">首頁</a></li>
-        <!--<li class="nav-item"><a class="nav-link" data-id="about" href="${getHref("about/index.html")}">關於我</a></li>
-        <li class="nav-item"><a class="nav-link" data-id="contact" href="${getHref("contact/index.html")}">聯絡我</a></li>-->
-        <li class="nav-item"><a class="nav-link" data-id="articles" href="${getHref("articles/index.html")}">文章</a></li>
+        <li class="nav-item"><a class="nav-link" data-id="index" href="${getHref(
+          "index.html"
+        )}">首頁</a></li>
+        <li class="nav-item"><a class="nav-link" data-id="tags" href="${getHref(
+          "tags/index.html"
+        )}">標籤</a></li>
+        <li class="nav-item"><a class="nav-link" data-id="categories" href="${getHref(
+          "categories/index.html"
+        )}">分類</a></li>
+        <li class="nav-item"><a class="nav-link" data-id="articles" href="${getHref(
+          "articles/index.html"
+        )}">文章</a></li>
         <li class="nav-item"><a class="nav-link" data-id="dynamic_html_design" href="${getHref(
           "dynamic_html_design/index.html"
         )}">動態網頁設計</a></li>
@@ -141,7 +149,10 @@ import { useHead } from "./composables/index.js";
        <ol class="breadcrumb">
          <li class="breadcrumb-item"><a href="#">Home</a></li>
          ${JSON.parse(breadcrumbs)
-           .map((crumb) => `<li class="breadcrumb-item"><a href="${crumb.href}">${crumb.title}</a></li>`)
+           .map(
+             (crumb) =>
+               `<li class="breadcrumb-item"><a href="${crumb.href}">${crumb.title}</a></li>`
+           )
            .join("")}
        </ol>
        `;

@@ -1,2 +1,2 @@
-import tags from "../data/tags.json" with { type: "json" };
-export {tags}
+import tags from "../data/tags.json" assert { type: "json" };
+export { tags };

@@ -1,2 +1,2 @@
-import articles from "../data/articles.json" with { type: "json" };
-export {articles}
+import articles from "../data/articles.json" assert { type: "json" };
+export { articles };

@@ -1,7 +1,11 @@
 import { useHead } from "./composables/index.js";
-(() => {
+const { appTimeline } = (() => {
+  console.log("執行");
+  const main = document.querySelector("main");
+  const footer = document.querySelector("footer");
+  const navbar = document.querySelector("nav");
+
   function setMain() {
-    const main = document.querySelector("main");
     main.className = "container my-4";
   }
 
@@ -64,15 +68,13 @@ import { useHead } from "./composables/index.js";
   // }
 
   function createFooter() {
-    const footer = document.querySelector("footer");
     footer.className = "py-5 bg-dark";
     footer.innerHTML = `
-                <div class="container"><p class="m-0 text-center text-white">Copyright &copy; Lin's Blog</p></div>
+                <div class="container"><p id="copyright-text" class="m-0 text-center text-white">Copyright &copy; Lin's Blog</p></div>
             `;
   }
 
   function createNavBar() {
-    const navbar = document.querySelector("nav");
     const root = navbar.dataset.root || "./";
     const getHref = (path = "") => `${root}${path}`;
     navbar.className = "navbar navbar-expand-lg navbar-dark bg-dark";
@@ -116,7 +118,6 @@ import { useHead } from "./composables/index.js";
   }
 
   function findNavBarActive() {
-    const navbar = document.querySelector("nav");
     const activeNavName = navbar.dataset.active || "index";
     const links = navbar.querySelectorAll("a");
     for (let i = 0; i < links.length; i++) {
@@ -160,9 +161,50 @@ import { useHead } from "./composables/index.js";
     document.body.insertBefore(rootDom, nav.nextSibling);
   }
 
+  // document.body.style.display = "none";
   setMain();
   createFooter();
   createNavBar();
   setHead();
   // createBreadCrumbs();
+  const appTimeline = gsap.timeline();
+
+  appTimeline.addLabel("first", 0);
+  appTimeline.addLabel("second", "+=0.25");
+  appTimeline
+    .from(
+      ".navbar-brand",
+      {
+        opacity: 0,
+        x: -20,
+        duration: 0.25,
+        ease: "power2.inOut",
+      },
+      "first"
+    )
+    .from(
+      "#copyright-text",
+      {
+        opacity: 0,
+        duration: 0.25,
+        ease: "power2.inOut",
+      },
+      "first"
+    );
+  appTimeline.from(
+    ".nav-item",
+    {
+      opacity: 0,
+      y: -10,
+      duration: 0.5,
+      ease: "power2.inOut",
+    },
+    "second"
+  );
+
+  return {
+    appTimeline,
+  };
 })();
+
+export { appTimeline };

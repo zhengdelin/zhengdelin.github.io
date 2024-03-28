@@ -6,24 +6,34 @@ import {
   useBranch,
   useDebounce,
   usePaginatedData,
+  useRouter,
 } from "../composables/index.js";
 import { tags } from "../tags/export.js";
+import { appTimeline } from "../app.js";
 
 const getURL = (category) => `index.html?id=${category}`;
 const id = new URL(location.href).searchParams.get("id");
 
 const container = document.querySelector("#contents");
 
-const articleContainer = new ArticleManager(_articles);
-const asideRenderer = new AsideRenderer();
+const articleManager = new ArticleManager(_articles);
+const asideRenderer = new AsideRenderer(appTimeline);
+
+appTimeline.from(container, {
+  y: -20,
+  opacity: 0,
+  duration: 0.5,
+  ease: "power2.inOut",
+});
 
 useBranch(id, {
   onFalse() {
-    const articleCounts = articleContainer.articleCountsByCategory;
+    const articleCounts = articleManager.articleCountsByCategory;
     // layout
     const header = document.createElement("header");
     header.classList.add("category-lists-header");
     const ul = document.createElement("ul");
+
     ul.className = "category-lists list-group";
     const nav = document.createElement("nav");
     nav.classList.add("my-3");
@@ -33,9 +43,16 @@ useBranch(id, {
     container.appendChild(nav);
 
     const paginationRenderer = new PaginationRenderer(nav);
-    const paginatedData = usePaginatedData(categories, 1, 10, (page, items) => {
-      render(items);
-    });
+    const router = useRouter();
+    const paginatedData = usePaginatedData(
+      categories,
+      router.query.page || 1,
+      10,
+      (page, items) => {
+        router.push({ query: { page } });
+        render(items);
+      }
+    );
     // console.log("paginatedData :>> ", paginatedData);
 
     const renderListItems = (categories) => {
@@ -111,16 +128,16 @@ useBranch(id, {
     header.appendChild(document.createTextNode("分類：" + id));
     container.appendChild(header);
 
-    const articleContainer = new ArticleManager(_articles);
+    const articleManager = new ArticleManager(_articles);
     ArticleRenderer.renderArticlesTimeline({
       container,
-      articles: articleContainer.getArticlesByCategory(id),
+      articles: articleManager.getArticlesByCategory(id),
       getArticleURL: (article) => `../articles/index.html?id=${article.id}`,
     });
     ArticleRenderer.initAnimation();
   },
 
-  onFirst() {
+  onFinally() {
     asideRenderer.renderTags({
       items: tags,
       getURL: (tag) => `../tags/index.html?id=${tag}`,

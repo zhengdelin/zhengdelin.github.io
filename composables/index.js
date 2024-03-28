@@ -157,3 +157,106 @@ export function useDebounce(fn, { delay = 1000, immediately = false } = {}) {
     }, delay);
   };
 }
+
+/**
+ * @typedef LocationParams
+ * @property {string} [path]
+ * @property {string} [hash]
+ * @property {Record<string, string>} [query]
+ * @property {Record<string, string>} [state]
+ * @property {boolean} [replace]
+ */
+
+/**
+ * @typedef RouterConfig
+ * @property {History['scrollRestoration']} [scrollRestoration]
+ */
+
+class Router {
+  /**
+   * @param {RouterConfig} [config]
+   */
+  constructor(config = {}) {
+    this.query = (() => {
+      const _query = new URLSearchParams(location.search);
+      const query = {};
+      for (const [key, value] of _query.entries()) {
+        query[key] = value;
+      }
+
+      Object.defineProperty(query, "toString", {
+        value() {
+          const entries = Object.entries(this);
+          if (!entries.length) return "";
+          return `?${entries
+            .map(([key, value]) => `${key}=${value}`)
+            .join("&")}`;
+        },
+      });
+      return query;
+    })();
+    this.path = location.pathname;
+    this.hash = location.hash;
+    this.state = history.state || {};
+    this.scrollRestoration = config.scrollRestoration || "auto";
+  }
+
+  get scrollRestoration() {
+    return history.scrollRestoration;
+  }
+
+  set scrollRestoration(value) {
+    history.scrollRestoration = value;
+  }
+
+  get fullPath() {
+    return `${this.path}${this.hash}${this.query}`;
+  }
+
+  /**
+   * @param {string | LocationParams} location
+   */
+  push(location) {
+    if (typeof location === "string") {
+      location = { path: location };
+    }
+
+    if (location.path) this.path = location.path;
+    if (location.hash) this.hash = location.hash;
+    if (location.query) {
+      Object.assign(this.query, location.query);
+    }
+    history[location.replace ? "replaceState" : "pushState"](
+      this.state,
+      "",
+      this.fullPath
+    ); // 避免刷新后出现空白页
+  }
+
+  /**
+   *
+   * @param {string | Omit<LocationParams, 'replace'>} location
+   */
+  replace(location) {
+    this.push({ ...location, replace: true });
+  }
+
+  back() {
+    history.back();
+  }
+
+  forward() {
+    history.forward();
+  }
+
+  go(n) {
+    history.go(n);
+  }
+}
+
+/**
+ * @param {RouterConfig} [config]
+ */
+export function useRouter(config) {
+  return new Router(config);
+}

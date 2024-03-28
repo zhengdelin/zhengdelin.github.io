@@ -1,4 +1,5 @@
-import { useHeadTitle } from "../composables/index.js";
+import { appTimeline } from "../app.js";
+import { useBranch, useHeadTitle, useRouter } from "../composables/index.js";
 import { Article, ArticleRenderer, ArticleManager } from "./index.module.js";
 import { AsideRenderer } from "../renderer.module.js";
 import { articles as _articles, categories, tags } from "../exports.js";
@@ -114,24 +115,51 @@ import { articles as _articles, categories, tags } from "../exports.js";
 
   const articleManager = new ArticleManager(_articles);
   const articles = articleManager.articles;
-  const id = new URL(location.href).searchParams.get("id");
 
-  const asideRenderer = new AsideRenderer();
-  asideRenderer.renderCategories({ items: categories, getURL: getCategoryURL });
-  asideRenderer.renderTags({ items: tags, getURL: getTagURL });
+  const startLabelName = "start";
+  appTimeline.addLabel(startLabelName);
+  appTimeline.from(
+    rootContainer,
+    {
+      opacity: 0,
+      y: 20,
+      duration: 0.5,
+      ease: "power1.inOut",
+    },
+    startLabelName
+  );
 
-  if (!id) {
-    ArticleRenderer.renderArticlesTimeline({
-      container: rootContainer,
-      articles,
-      getArticleURL: getArticleURL,
-    });
-    ArticleRenderer.initAnimation();
-    return;
-  }
+  const router = useRouter();
+  const id = router.query.id;
 
-  const article = articleManager.getArticle(id);
-  useHeadTitle(article.title);
-  renderArticle(article);
+  useBranch(id, {
+    onTrue() {
+      const article = articleManager.getArticle(id);
+      useHeadTitle(article.title);
+      renderArticle(article);
+    },
+    onFalse() {
+      ArticleRenderer.renderArticlesTimeline({
+        container: rootContainer,
+        articles,
+        getArticleURL: getArticleURL,
+      });
+      ArticleRenderer.initAnimation();
+    },
+    onFinally() {
+      const asideRenderer = new AsideRenderer(appTimeline);
+      asideRenderer.renderCategories({
+        items: categories,
+        getURL: getCategoryURL,
+        timelineLabel: startLabelName,
+      });
+      asideRenderer.renderTags({
+        items: tags,
+        getURL: getTagURL,
+        timelineLabel: startLabelName,
+      });
+    },
+  });
+
   // renderSearch();
 })();

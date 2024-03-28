@@ -1,6 +1,7 @@
 import { arrayChunk } from "./utils/array.js";
 import { PaginatedData } from "./composables/index.js";
 
+123
 function getListedItemsInnerHTML(items, maxShowCount, getItemURL) {
   items = items.slice(0, maxShowCount);
   const chunkedItems = arrayChunk(items, Math.ceil(items.length / 2));
@@ -31,17 +32,20 @@ class AsideRenderer {
    *
    * @param {HTMLElement} [container]
    */
-  constructor(container = document.querySelector("aside")) {
+  constructor(timeline, container = document.querySelector("aside")) {
     this.container = container;
+    this.timeline = timeline;
   }
 
-  renderAsideCard(title, renderBody) {
+  renderAsideCard(title, renderBody, timelineLabel = undefined) {
     const root = document.createElement("div");
     root.className = "card mb-4";
 
     const header = document.createElement("header");
     header.classList.add("card-header");
-    header.textContent = title;
+    const span = document.createElement("span");
+    span.textContent = title;
+    header.appendChild(span);
 
     const body = document.createElement("div");
     body.classList.add("card-body");
@@ -52,6 +56,17 @@ class AsideRenderer {
     root.appendChild(body);
 
     this.container.appendChild(root);
+    this.timeline
+      ?.from(span, { opacity: 0, y: 20, duration: 0.2 }, timelineLabel)
+      .from(
+        body,
+        {
+          opacity: 0,
+          y: 20,
+          duration: 0.5,
+        },
+        `${timelineLabel}.+=0.2`
+      );
   }
 
   renderSearch() {
@@ -80,6 +95,7 @@ class AsideRenderer {
    * @property {number} [maxShowCount]
    * @property {(item:T)=>string} getURL
    * @property {string} title
+   * @property {string} [timelineLabel]
    */
 
   /**
@@ -91,19 +107,34 @@ class AsideRenderer {
     maxShowCount = Infinity,
     getURL,
     title = "所有分類",
+    timelineLabel,
   }) {
-    this.renderAsideCard(title, (body) => {
-      body.innerHTML = getListedItemsInnerHTML(items, maxShowCount, getURL);
-    });
+    this.renderAsideCard(
+      title,
+      (body) => {
+        body.innerHTML = getListedItemsInnerHTML(items, maxShowCount, getURL);
+      },
+      timelineLabel
+    );
   }
 
   /**
    * @param {RenderCardListParams<string>} param0
    */
-  renderTags({ items, maxShowCount = Infinity, getURL, title = "所有標籤" }) {
-    this.renderAsideCard(title, (body) => {
-      body.innerHTML = getListedItemsInnerHTML(items, maxShowCount, getURL);
-    });
+  renderTags({
+    items,
+    maxShowCount = Infinity,
+    getURL,
+    title = "所有標籤",
+    timelineLabel,
+  }) {
+    this.renderAsideCard(
+      title,
+      (body) => {
+        body.innerHTML = getListedItemsInnerHTML(items, maxShowCount, getURL);
+      },
+      timelineLabel
+    );
   }
 }
 
@@ -120,7 +151,7 @@ class PaginationRenderer {
    * @param {PaginatedData} data
    */
   renderPagination(data) {
-    console.log("data :>> ", data);
+    // console.log("data :>> ", data);
     const createPageItem = (
       page,
       text = page,

@@ -1,4 +1,4 @@
-<i class="fa fa-chevron-left fa-xs"></i>/***CSS Animations****/
+/***CSS Animations****/
 @charset "UTF-8";
 
 /* Animation Delay */
@@ -1002,12 +1002,14 @@
   }
 
   40% {
-    transform: perspective(400px) translate3d(0, 0, 150px) rotate3d(0, 1, 0, -190deg);
+    transform: perspective(400px) translate3d(0, 0, 150px)
+      rotate3d(0, 1, 0, -190deg);
     animation-timing-function: ease-out;
   }
 
   50% {
-    transform: perspective(400px) translate3d(0, 0, 150px) rotate3d(0, 1, 0, -170deg);
+    transform: perspective(400px) translate3d(0, 0, 150px)
+      rotate3d(0, 1, 0, -170deg);
     animation-timing-function: ease-in;
   }
 
@@ -1748,10 +1750,19 @@
 }
 /**************Animation CSS End Here****************/
 
-
-
-
-
+.revert-browser-stylesheet,
+.revert-browser-stylesheet * {
+  line-height: revert;
+  font-size: revert;
+  font-weight: revert;
+  list-style: revert;
+  margin: revert;
+  padding: revert;
+  color: inherit;
+  text-decoration: inherit;
+  word-break: break-all;
+  text-align: revert;
+}
 
 .timeline {
   position: relative;
@@ -2140,6 +2151,6 @@ use-head {
   color: var(--bs-link-hover-color);
 }
 
-.cursor-pointer{
+.cursor-pointer {
   cursor: pointer;
 }

@@ -11149,17 +11149,3 @@ fieldset:disabled .btn {
     display: none !important;
   }
 }
-
-.revert-browser-stylesheet,
-.revert-browser-stylesheet * {
-  line-height: revert;
-  font-size: revert;
-  font-weight: revert;
-  list-style: revert;
-  margin: revert;
-  padding: revert;
-  color: inherit;
-  text-decoration: inherit;
-  word-break: break-all;
-  text-align: revert;
-}

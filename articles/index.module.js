@@ -116,9 +116,9 @@ class Article {
         (_, v) => replaceVariables[v]
       );
 
-      if (type === "html") {
+      if (this.isHTML) {
         return content;
-      } else if (type === "md") {
+      } else if (this.isMD) {
         const parsedContent = this.marked?.parse(content);
         const div = document.createElement("div");
         div.innerHTML = parsedContent;
@@ -134,6 +134,14 @@ class Article {
     return `${formatTime(this.date, "yyyyMMdd", {
       isPad: true,
     })}-${this._id}`;
+  }
+
+  get isHTML() {
+    return this.type === "html";
+  }
+
+  get isMD() {
+    return this.type === "md";
   }
 
   getFormattedDate(format = "MMM dd, yyyy") {
@@ -242,7 +250,6 @@ class ArticleManager {
   }
 
   static sortArticlesByDate(articles) {
-    [].sort();
     return articles.sort((a, b) => {
       if (b.date === a.date) {
         return 0;

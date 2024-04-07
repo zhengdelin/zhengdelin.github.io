@@ -55,7 +55,10 @@ import "https://cdn.jsdelivr.net/npm/marked-highlight@2.1.1/lib/index.umd.min.js
 
   async function createArticleSection(article) {
     const section = document.createElement("section");
-    section.classList.add("mb-5", "revert-browser-stylesheet");
+    section.classList.add("mb-5");
+    if (article.isMD) {
+      section.classList.add("revert-browser-stylesheet");
+    }
     section.innerHTML = await article.getContent();
     ArticleRenderer.renderArticleCodeLineNumbersBlock(section, hljs);
     return section;

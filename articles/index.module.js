@@ -1,8 +1,8 @@
 import { formatTime } from "../utils/time.js";
 
 class Article {
-  /** @type {number} */
-  id;
+  /** @type {string} */
+  _id;
   /** @type {string} */
   title;
   /** @type {string} */
@@ -13,6 +13,13 @@ class Article {
   type;
   /** @type {string} */
   filename;
+  /**
+   * 基於articles/contents資料夾底下的路徑
+   * 如: 2022/01/01/chat-gpt
+   * @type {string}
+   **/
+  fileFolderPath;
+
   /** @type {string[]} */
   tags;
   /** @type {string[]} */
@@ -20,55 +27,113 @@ class Article {
   /** @type {string} */
   author;
 
+  /** @type {boolean} */
+  asIframe;
+  /** @type {Record<string, string>} */
+  iframeAttrs;
+  marked;
+
   /**
-   * @typedef ArticleAddArgs
+   * @typedef ArticleCreateArgs
    * @property {Article['id']} id
    * @property {Article['title']} title
    * @property {Article['description']} [description]
    * @property {Article['date'] | string} date
    * @property {Article['type']} [type]
    * @property {Article['filename']} [filename]
+   * @property {Article['fileFolderPath']} [fileFolderPath]
    * @property {Article['tags']} [tags]
    * @property {Article['categories']} [categories]
+   * @property {Article['asIframe']} [asIframe]
+   * @property {Article['iframeAttrs']} [iframeAttrs]
+   * @property {Article['marked']} [marked]
    */
 
   /**
    *
-   * @param {ArticleAddArgs} param0
+   * @param {ArticleCreateArgs} param0
    */
   constructor({
     id,
     title,
     date,
     type = "html",
+    fileFolderPath,
     filename,
     tags = [],
     categories = [],
     description = "",
+    asIframe = false,
+    iframeAttrs = {},
+    marked,
   }) {
-    this.id = id;
+    this._id = id;
     this.title = title;
     this.description = description;
     this.date = new Date(date);
     this.type = type;
+    this.fileFolderPath = fileFolderPath;
     this.filename = filename;
     this.tags = tags;
     this.categories = categories;
     this.author = "Lin";
+    this.asIframe = asIframe;
+    this.iframeAttrs = iframeAttrs;
+    this.marked = marked;
   }
 
-  async getContent(folderPath = "./contents/") {
-    const filename = this.filename || `${this.id}/index.html`;
-    const filepath = folderPath + filename;
+  async getContent(articlesFolderPath = ".") {
+    const type = this.type;
+    const filename = this.filename || `index.${type}`;
+    const folderPath =
+      this.fileFolderPath ||
+      `${formatTime(this.date, "yyyy/MM/dd")}/${this._id}`;
+
+    const fullFolderPath = `${articlesFolderPath}/contents/${folderPath}`
+      .split("/")
+      .filter(Boolean)
+      .join("/");
+    const filePath = `${fullFolderPath}/${filename}`;
+
+    if (this.asIframe) {
+      const iframeAttrs = { ...this.iframeAttrs };
+      iframeAttrs.src ||= filePath;
+      iframeAttrs.title ||= this.title;
+      return `<iframe ${Object.entries(iframeAttrs)
+        .map(([k, v]) => `${k}="${v}"`)
+        .join(" ")}></iframe>`;
+    }
 
     try {
-      const res = await fetch(filepath);
-      const content = await res.text();
-      return content;
+      const replaceVariables = {
+        curFolderPath: fullFolderPath,
+        articlesFolderPath,
+      };
+
+      const res = await fetch(filePath);
+      const content = (await res.text()).replace(
+        /\{\{(.*?)\}\}/g,
+        (_, v) => replaceVariables[v]
+      );
+
+      if (type === "html") {
+        return content;
+      } else if (type === "md") {
+        const parsedContent = this.marked?.parse(content);
+        const div = document.createElement("div");
+        div.innerHTML = parsedContent;
+        return div.innerHTML;
+      }
     } catch (error) {
       console.error(error);
-      return "";
+      return `Error: 發現問題，請聯繫作者。`;
     }
+  }
+
+  get id() {
+    return `${formatTime(this.date, "yyyyMMdd", {
+      isPad: true,
+    })}-${this._id}`;
   }
 
   getFormattedDate(format = "MMM dd, yyyy") {
@@ -77,28 +142,24 @@ class Article {
 }
 
 class ArticleManager {
-  id = 1;
-
   /** @type {Article[]} */
   articles = [];
 
-  constructor(articles = []) {
+  constructor(articles = [], marked = null) {
     /**
      * @type {Record<Article['id'], Article>}
      */
     this.articlesMap = {};
+    this.marked = marked;
     this.addArticles(articles);
   }
 
   /**
-   * @param {ArticleAddArgs & { id?: Article['id'] }} args
+   * @param {ArticleCreateArgs} args
    * @returns
    */
   addArticle(args) {
-    const article = new Article({
-      id: (this.id++).toString(),
-      ...args,
-    });
+    const article = new Article({ ...args, marked: this.marked });
     this.articles.push(article);
     this.articlesMap[article.id] = article;
     return article;
@@ -106,7 +167,7 @@ class ArticleManager {
 
   /**
    *
-   * @param {(ArticleAddArgs & { id?: Article['id'] })[]} articles
+   * @param {ArticleCreateArgs[]} articles
    */
   addArticles(articles) {
     for (const article of articles) {
@@ -181,7 +242,13 @@ class ArticleManager {
   }
 
   static sortArticlesByDate(articles) {
-    return articles.sort((a, b) => b.date - a.date);
+    [].sort();
+    return articles.sort((a, b) => {
+      if (b.date === a.date) {
+        return 0;
+      }
+      return b.date > a.date ? 1 : -1;
+    });
   }
 }
 
@@ -298,6 +365,12 @@ class ArticleRenderer {
     });
     animationElements.forEach((el) => observer.observe(el));
     return observer;
+  }
+
+  static renderArticleCodeLineNumbersBlock(el, hljs) {
+    el.querySelectorAll("pre code").forEach((block) => {
+      hljs.lineNumbersBlock(block);
+    });
   }
 }
 

@@ -1,50 +1,113 @@
 [
   {
+    "id": "chat-gpt",
     "title": "20240219 ChatGpt",
     "date": "2024-02-19",
     "tags": ["ChatGpt", "Javascript"],
     "categories": ["動態網頁設計"]
   },
   {
+    "id": "carousel",
     "title": "20240226 輪播圖",
     "date": "2024-02-26",
     "tags": ["Web Design", "JavaScript", "HTML", "CSS"],
     "categories": ["動態網頁設計", "Side Project"]
   },
   {
+    "id": "tetris-game",
     "title": "20240301 ~ 20240305 俄羅斯方塊",
     "date": "2024-03-01",
     "tags": ["Web Design", "JavaScript", "HTML", "CSS"],
     "categories": ["動態網頁設計", "Side Project"]
   },
   {
+    "id": "30-days-of-javascript",
     "title": "20240304 30 Days Of JavaScript",
     "date": "2024-03-04",
     "tags": ["JavaScript"],
     "categories": ["動態網頁設計"]
   },
   {
+    "id": "form-design",
     "title": "20240311表單",
     "date": "2024-03-11",
     "tags": ["JavaScript", "HTML"],
-    "categories": ["動態網頁設計"]
+    "categories": ["動態網頁設計"],
+    "asIframe": true,
+    "iframeAttrs": {
+      "width": "100%",
+      "height": "800px"
+    }
   },
   {
+    "id": "30-days-of-javascript",
     "title": "20240315 30 Days Of JavaScript",
     "date": "2024-03-15",
     "tags": ["JavaScript"],
     "categories": ["動態網頁設計"]
   },
   {
+    "id": "30-days-of-javascript-finish",
     "title": "20240318 30 Days Of JavaScript 完成",
     "date": "2024-03-18",
     "tags": ["JavaScript"],
-    "categories": ["動態網頁設計"]
+    "categories": ["動態網頁設計"],
+    "type": "md"
   },
   {
+    "id": "jQuery-form",
     "title": "20240325 jQuery表單設計",
     "date": "2024-03-25",
     "tags": ["JavaScript"],
-    "categories": ["動態網頁設計"]
+    "categories": ["動態網頁設計"],
+    "asIframe": true,
+    "iframeAttrs": {
+      "width": "100%",
+      "height": "300px"
+    }
+  },
+  {
+    "id": "jQuery-form-and-php",
+    "title": "20240401 jQuery表單與後端交互",
+    "date": "2024-04-01",
+    "tags": ["JavaScript"],
+    "categories": ["動態網頁設計"],
+    "type": "md"
+  },
+  {
+    "id": "dart-variables-and-operators",
+    "title": "20240407 Dart學習日誌：變數與運算符號",
+    "date": "2024-04-07",
+    "tags": ["Dart"],
+    "categories": ["Flutter"],
+    "type": "md",
+    "filename": "變數和運算符號.md"
+  },
+  {
+    "id": "dart-loops-conditions-and-type-conversion",
+    "title": "20240407 Dart學習日誌：迴圈、條件判斷與類型轉換",
+    "date": "2024-04-07",
+    "tags": ["Dart"],
+    "categories": ["Flutter"],
+    "type": "md",
+    "filename": "迴圈、條件判斷與類型轉換.md"
+  },
+  {
+    "id": "dart-list-set-and-map",
+    "title": "20240407 Dart學習日誌：List、Set、Map",
+    "date": "2024-04-07",
+    "tags": ["Dart"],
+    "categories": ["Flutter"],
+    "type": "md",
+    "filename": "List、Set、Map.md"
+  },
+  {
+    "id": "dart-function",
+    "title": "20240407 Dart學習日誌：函數",
+    "date": "2024-04-07",
+    "tags": ["Dart"],
+    "categories": ["Flutter"],
+    "type": "md",
+    "filename": "函數.md"
   }
 ]

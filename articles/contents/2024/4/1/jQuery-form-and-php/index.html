@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>表單</title>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <style>
+      body {
+        font-family: Arial, sans-serif;
+        background-color: #f4f4f4;
+      }
+
+      form {
+        background-color: #ffffff;
+        max-width: 300px;
+        margin: 0 auto;
+        padding: 20px;
+        border-radius: 5px;
+        box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+      }
+
+      form label {
+        font-weight: bold;
+      }
+
+      form input[type="text"],
+      form input[type="password"],
+      form input[type="submit"] {
+        width: 100%;
+        padding: 10px;
+        margin-top: 5px;
+        margin-bottom: 10px;
+        border: 1px solid #ccc;
+        border-radius: 3px;
+      }
+
+      form input[type="submit"] {
+        background-color: #007bff;
+        color: #ffffff;
+        cursor: pointer;
+      }
+
+      form input[type="submit"]:hover {
+        background-color: #0056b3;
+      }
+    </style>
+  </head>
+  <body>
+    <form action="./index.php" method="post">
+      <label for="username">帳號:</label><br />
+      <input type="text" id="username" name="username" /><br />
+      <label for="password">密碼:</label><br />
+      <input type="password" id="password" name="password" /><br /><br />
+      <input type="submit" value="提交" />
+    </form>
+    <script src="./index.js"></script>
+  </body>
+</html>

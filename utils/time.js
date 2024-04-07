@@ -12,9 +12,12 @@ function _formatterNormalize(formatter) {
     formatter = "yyyy-MM-dd HH:mm:ss";
   }
   return (dateInfo) => {
-    return formatter.replace(new RegExp(Object.keys(dateInfo).join("|"), "g"), function (match) {
-      return dateInfo[match];
-    });
+    return formatter.replace(
+      new RegExp(Object.keys(dateInfo).join("|"), "g"),
+      function (match) {
+        return dateInfo[match];
+      }
+    );
   };
 }
 
@@ -36,6 +39,7 @@ function _formatterNormalize(formatter) {
 
 const W_Map = {
   "zh-TW": {
+    0: "日",
     1: "一",
     2: "二",
     3: "三",
@@ -45,6 +49,7 @@ const W_Map = {
     7: "日",
   },
   en: {
+    0: "Sun",
     1: "Mon",
     2: "Tue",
     3: "Wed",
@@ -100,7 +105,11 @@ const locales = ["zh-TW", "en"];
  * @param {"zh-TW" | "en"} [options.locale]
  * @returns
  */
-export function formatTime(date, formatter, { isPad = false, defaultValue = "", locale = "zh-TW" } = {}) {
+export function formatTime(
+  date,
+  formatter,
+  { isPad = false, defaultValue = "", locale = "zh-TW" } = {}
+) {
   if (!locales.includes(locale)) {
     throw new Error(`Unsupported locale: ${locale}`);
   }
@@ -127,14 +136,28 @@ export function formatTime(date, formatter, { isPad = false, defaultValue = "", 
   };
 
   const dateInfo = {
-    yyyy: isPad ? _dateInfo.year.toString().padStart(4, "0") : _dateInfo.year.toString(),
+    yyyy: isPad
+      ? _dateInfo.year.toString().padStart(4, "0")
+      : _dateInfo.year.toString(),
     MMM: MMM_Map[locale][_dateInfo.month],
-    MM: isPad ? _dateInfo.month.toString().padStart(2, "0") : _dateInfo.month.toString(),
-    dd: isPad ? _dateInfo.date.toString().padStart(2, "0") : _dateInfo.date.toString(),
-    HH: isPad ? _dateInfo.hours.toString().padStart(2, "0") : _dateInfo.hours.toString(),
-    mm: isPad ? _dateInfo.minutes.toString().padStart(2, "0") : _dateInfo.minutes.toString(),
-    ss: isPad ? _dateInfo.seconds.toString().padStart(2, "0") : _dateInfo.seconds.toString(),
-    ms: isPad ? _dateInfo.milliseconds.toString().padStart(3, "0") : _dateInfo.milliseconds.toString(),
+    MM: isPad
+      ? _dateInfo.month.toString().padStart(2, "0")
+      : _dateInfo.month.toString(),
+    dd: isPad
+      ? _dateInfo.date.toString().padStart(2, "0")
+      : _dateInfo.date.toString(),
+    HH: isPad
+      ? _dateInfo.hours.toString().padStart(2, "0")
+      : _dateInfo.hours.toString(),
+    mm: isPad
+      ? _dateInfo.minutes.toString().padStart(2, "0")
+      : _dateInfo.minutes.toString(),
+    ss: isPad
+      ? _dateInfo.seconds.toString().padStart(2, "0")
+      : _dateInfo.seconds.toString(),
+    ms: isPad
+      ? _dateInfo.milliseconds.toString().padStart(3, "0")
+      : _dateInfo.milliseconds.toString(),
     w: _dateInfo.day,
     W: W_Map[locale][_dateInfo.day],
   };

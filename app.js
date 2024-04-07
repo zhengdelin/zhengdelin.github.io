@@ -106,8 +106,8 @@ const { appTimeline } = (() => {
         <li class="nav-item"><a class="nav-link" data-id="articles" href="${getHref(
           "articles/index.html"
         )}">文章</a></li>
-        <li class="nav-item"><a class="nav-link" data-id="dynamic_html_design" href="${getHref(
-          "dynamic_html_design/index.html"
+        <li class="nav-item"><a class="nav-link" data-id="dynamic_web" href="${getHref(
+          "dynamic_web/index.html"
         )}">動態網頁設計</a></li>
       </ul>
     </div>

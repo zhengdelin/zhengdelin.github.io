@@ -4,13 +4,18 @@ import { Article, ArticleRenderer, ArticleManager } from "./index.module.js";
 import { AsideRenderer } from "../renderer.module.js";
 import { articles as _articles, categories, tags } from "../exports.js";
 
+import { Marked } from "https://cdn.jsdelivr.net/npm/marked/lib/marked.esm.js";
+import "https://cdn.jsdelivr.net/npm/marked-highlight@2.1.1/lib/index.umd.min.js";
+
 (async () => {
   const rootContainer = document.querySelector("article");
 
   const getTagURL = (tag) => `../tags/index.html?id=${tag}`;
   const getCategoryURL = (category) =>
     `../categories/index.html?id=${category}`;
-  const getArticleURL = (article) => `index.html?id=${article.id}`;
+  const getArticleURL = (article) => {
+    return `index.html?id=${article.id}`;
+  };
 
   function createArticleHeader(article) {
     const header = document.createElement("header");
@@ -50,8 +55,9 @@ import { articles as _articles, categories, tags } from "../exports.js";
 
   async function createArticleSection(article) {
     const section = document.createElement("section");
-    section.classList.add("mb-5");
+    section.classList.add("mb-5", "revert-browser-stylesheet");
     section.innerHTML = await article.getContent();
+    ArticleRenderer.renderArticleCodeLineNumbersBlock(section, hljs);
     return section;
   }
 
@@ -113,9 +119,31 @@ import { articles as _articles, categories, tags } from "../exports.js";
     rootContainer.appendChild(footer);
   }
 
-  const articleManager = new ArticleManager(_articles);
+  // const c = new CopyButtonPlugin({
+  //   callback: (text, el) => console.log("Copied to clipboard", text),
+  // });
+  // hljs.addPlugin(c);
+  // hljs.addPlugin({
+  //   "after:highlightElement": ({ el, result }) => {
+  //     console.log("el :>> ", el);
+  //     // move the language from the result into the dataset
+  //     el.dataset.language = result.language;
+  //   },
+  // });
+  const marked = new Marked(
+    markedHighlight.markedHighlight({
+      langPrefix: "hljs language-",
+      highlight(code, lang) {
+        const language = hljs.getLanguage(lang) ? lang : "plaintext";
+        const text = hljs.highlight(code, { language }).value;
+        return text;
+      },
+    })
+  );
+  const articleManager = new ArticleManager(_articles, marked);
   const articles = articleManager.articles;
 
+  // 調整動畫
   const startLabelName = "start";
   appTimeline.addLabel(startLabelName);
   appTimeline.from(

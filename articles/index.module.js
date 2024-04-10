@@ -1,5 +1,10 @@
 import { formatTime } from "../utils/time.js";
 
+/**
+ * @typedef MDConfig
+ * @property {boolean} removeH1
+ */
+
 class Article {
   /** @type {string} */
   _id;
@@ -33,6 +38,9 @@ class Article {
   iframeAttrs;
   marked;
 
+  /** @type {MDConfig} */
+  mdConfig;
+
   /**
    * @typedef ArticleCreateArgs
    * @property {Article['id']} id
@@ -47,6 +55,7 @@ class Article {
    * @property {Article['asIframe']} [asIframe]
    * @property {Article['iframeAttrs']} [iframeAttrs]
    * @property {Article['marked']} [marked]
+   * @property {Article['mdConfig']} [mdConfig]
    */
 
   /**
@@ -66,6 +75,7 @@ class Article {
     asIframe = false,
     iframeAttrs = {},
     marked,
+    mdConfig = {},
   }) {
     this._id = id;
     this.title = title;
@@ -80,14 +90,14 @@ class Article {
     this.asIframe = asIframe;
     this.iframeAttrs = iframeAttrs;
     this.marked = marked;
+    this.mdConfig = { removeH1: true, ...mdConfig };
   }
 
   async getContent(articlesFolderPath = ".") {
     const type = this.type;
     const filename = this.filename || `index.${type}`;
     const folderPath =
-      this.fileFolderPath ||
-      `${formatTime(this.date, "yyyy/MM/dd")}/${this._id}`;
+      this.fileFolderPath || `${formatTime(this.date, "yyyy/M/D")}/${this._id}`;
 
     const fullFolderPath = `${articlesFolderPath}/contents/${folderPath}`
       .split("/")
@@ -109,19 +119,38 @@ class Article {
         curFolderPath: fullFolderPath,
         articlesFolderPath,
       };
+      const replaceTemplateStrings = (text, variables) => {
+        if (!text || !variables) return "";
+        return text.replace(/\{\{(.*?)\}\}/g, (_, v) => replaceVariables[v]);
+      };
 
       const res = await fetch(filePath);
-      const content = (await res.text()).replace(
-        /\{\{(.*?)\}\}/g,
-        (_, v) => replaceVariables[v]
+      const content = replaceTemplateStrings(
+        await res.text(),
+        replaceVariables
       );
+
+      const handleImageSrc = (div) => {
+        for (const img of div.querySelectorAll("img")) {
+          const datasetSrc = img.dataset.src;
+          if (!datasetSrc) return;
+          img.src = replaceTemplateStrings(datasetSrc, replaceVariables);
+        }
+      };
 
       if (this.isHTML) {
         return content;
       } else if (this.isMD) {
-        const parsedContent = this.marked?.parse(content);
+        const parsedContent = this.marked?.parse(content, { breaks: true });
         const div = document.createElement("div");
         div.innerHTML = parsedContent;
+        if (this.mdConfig.removeH1) {
+          div.querySelectorAll("h1").forEach((h1) => {
+            h1.remove();
+          });
+        }
+
+        handleImageSrc(div);
         return div.innerHTML;
       }
     } catch (error) {
@@ -131,7 +160,7 @@ class Article {
   }
 
   get id() {
-    return `${formatTime(this.date, "yyyyMMdd", {
+    return `${formatTime(this.date, "yyyyMMDD", {
       isPad: true,
     })}-${this._id}`;
   }
@@ -144,7 +173,7 @@ class Article {
     return this.type === "md";
   }
 
-  getFormattedDate(format = "MMM dd, yyyy") {
+  getFormattedDate(format = "MMM DD, yyyy") {
     return formatTime(this.date, format);
   }
 }
@@ -288,7 +317,7 @@ class ArticleRenderer {
                 <div class="timeline-content">
                   <div class="date">
                     <p>${article.date.getDate()}</p>
-                    <small>${formatTime(article.date, "W", {
+                    <small>${formatTime(article.date, "ddd", {
                       locale: "en",
                     })}</small>
                   </div>

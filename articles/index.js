@@ -136,7 +136,7 @@ import "https://cdn.jsdelivr.net/npm/marked-highlight@2.1.1/lib/index.umd.min.js
   const marked = new Marked(
     markedHighlight.markedHighlight({
       langPrefix: "hljs language-",
-      highlight(code, lang) {
+      highlight(code, lang, info) {
         const language = hljs.getLanguage(lang) ? lang : "plaintext";
         const text = hljs.highlight(code, { language }).value;
         return text;

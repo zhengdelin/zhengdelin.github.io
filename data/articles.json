@@ -76,7 +76,7 @@
   },
   {
     "id": "dart-variables-and-operators",
-    "title": "20240407 Dart學習日誌：變數與運算符號",
+    "title": "[Dart學習紀錄01] - 變數與運算符號",
     "date": "2024-04-07",
     "tags": ["Dart"],
     "categories": ["Flutter"],
@@ -85,7 +85,7 @@
   },
   {
     "id": "dart-loops-conditions-and-type-conversion",
-    "title": "20240407 Dart學習日誌：迴圈、條件判斷與類型轉換",
+    "title": "[Dart學習紀錄02] - 迴圈、條件判斷與類型轉換",
     "date": "2024-04-07",
     "tags": ["Dart"],
     "categories": ["Flutter"],
@@ -94,7 +94,7 @@
   },
   {
     "id": "dart-list-set-and-map",
-    "title": "20240407 Dart學習日誌：List、Set、Map",
+    "title": "[Dart學習紀錄03] - List、Set、Map",
     "date": "2024-04-07",
     "tags": ["Dart"],
     "categories": ["Flutter"],
@@ -103,11 +103,43 @@
   },
   {
     "id": "dart-function",
-    "title": "20240407 Dart學習日誌：函數",
+    "title": "[Dart學習紀錄04] - 函數",
     "date": "2024-04-07",
     "tags": ["Dart"],
     "categories": ["Flutter"],
     "type": "md",
     "filename": "函數.md"
+  },
+  {
+    "id": "ubuntu-update-hostname",
+    "title": "[Ubuntu 22.04] 使用 hostnamectl 修改主機名稱",
+    "date": "2024-04-10",
+    "tags": ["Ubuntu"],
+    "categories": ["Linux"],
+    "type": "md"
+  },
+  {
+    "id": "ubuntu-install-ssh",
+    "title": "[Ubuntu 22.04] 安裝 ssh 服務",
+    "date": "2024-04-10",
+    "tags": ["Ubuntu"],
+    "categories": ["Linux"],
+    "type": "md"
+  },
+  {
+    "id": "ubuntu-adduser",
+    "title": "[Ubuntu 22.04] 使用指令新增使用者",
+    "date": "2024-04-10",
+    "tags": ["Ubuntu"],
+    "categories": ["Linux"],
+    "type": "md"
+  },
+  {
+    "id": "ubuntu-install-nginx、mysql、php",
+    "title": "[Ubuntu 22.04] 安裝 Nginx、Mysql、PHP (LEMP)",
+    "date": "2024-04-10",
+    "tags": ["Ubuntu"],
+    "categories": ["Linux"],
+    "type": "md"
   }
 ]

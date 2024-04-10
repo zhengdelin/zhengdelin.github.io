@@ -1751,7 +1751,14 @@
 /**************Animation CSS End Here****************/
 
 .revert-browser-stylesheet,
-.revert-browser-stylesheet * {
+.revert-browser-stylesheet p,
+.revert-browser-stylesheet h1,
+.revert-browser-stylesheet h2,
+.revert-browser-stylesheet h3,
+.revert-browser-stylesheet h4,
+.revert-browser-stylesheet h5,
+.revert-browser-stylesheet h6,
+.revert-browser-stylesheet pre {
   line-height: revert;
   font-size: revert;
   font-weight: revert;

@@ -9,7 +9,7 @@
 
 ``` shell
 # 新增使用者
-sudo adduser 使用者名稱
+sudo adduser your_user_name
 ```
 
 然後會跳出一些基本設定，密碼、名稱、電話等：
@@ -18,17 +18,24 @@ sudo adduser 使用者名稱
 
 執行指令後，Ubuntu 會自動幫使用者新增 Home 資料夾並設定該資料夾的初始設定。
 
-### 將使用者加入群組
+## 將使用者加入群組
 
 若要將該使用者加入某個群組，例如加入 `sudo` ，使該使用者可以執行 sudo 指令：
 
 ``` shell
-sudo adduser 使用者名稱 sudo
+sudo adduser your_user_name sudo
 ```
 
-### 切換當前使用者
+## 更改使用者的Home目錄
+
+若要修改使用者的目錄，可以使用以下指令：
+```shell
+sudo usermod -d /your_home_directory your_user_name
+```
+
+## 切換當前使用者
 
 使用以下指令切換當前使用者：
 ``` shell
-su 使用者名稱
+su your_user_name
 ```

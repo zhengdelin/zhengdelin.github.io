@@ -141,5 +141,46 @@
     "tags": ["Ubuntu"],
     "categories": ["Linux"],
     "type": "md"
+  },
+  {
+    "id": "ubuntu-install-ftp",
+    "title": "[Ubuntu 22.04] 安裝 ftp server",
+    "date": "2024-04-11",
+    "tags": ["Ubuntu"],
+    "categories": ["Linux"],
+    "type": "md"
+  },
+  {
+    "id": "ubuntu-install-git",
+    "title": "[Ubuntu 22.04] 安裝 Git",
+    "date": "2024-04-11",
+    "tags": ["Ubuntu"],
+    "categories": ["Linux"],
+    "type": "md"
+  },
+
+  {
+    "id": "ubuntu-mysql-adduser",
+    "title": "[Ubuntu 22.04] Mysql 新增使用者並賦予讀取資料庫權限",
+    "date": "2024-04-11",
+    "tags": ["Ubuntu"],
+    "categories": ["Linux"],
+    "type": "md"
+  },
+  {
+    "id": "ubuntu-mysql-import-export",
+    "title": "[Ubuntu 22.04] Mysql 匯入匯出資料庫",
+    "date": "2024-04-11",
+    "tags": ["Ubuntu"],
+    "categories": ["Linux"],
+    "type": "md"
+  },
+  {
+    "id": "ubuntu-deploy-vuejs-php",
+    "title": "[Ubuntu 22.04] 部署前端 Vue.js、後端 PHP",
+    "date": "2024-04-11",
+    "tags": ["Ubuntu"],
+    "categories": ["Linux"],
+    "type": "md"
   }
 ]

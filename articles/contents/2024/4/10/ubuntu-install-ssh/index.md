@@ -14,7 +14,7 @@ Unit ssh.service could not be found.
 ## 安裝 ssh
 
 ``` shell
-sudo apt install ssh -y
+sudo apt update && sudo apt install ssh -y
 ```
 
 安裝完後執行 `systemctl status ssh` 檢查 ssh 服務狀態：
@@ -49,7 +49,7 @@ ifconfig # 需要安裝net-tools
 
 <img src="image-1.png" data-src="{{curFolderPath}}/image-1.png" alt="alt" >
 
-<font color="red">_如果你使用的是 Oracle Vm VirtualBox，記得將虛擬機的**網路介面卡**設為**橋接介面卡**，否則無法連線，如：_</font>
+<font color="red">_※ 如果你使用的是 Oracle VM VirtualBox，記得將虛擬機的**網路介面卡**設為**橋接介面卡**，否則無法連線，如：_</font>
 
 <img src="image-2.png" data-src="{{curFolderPath}}/image-2.png" alt="alt" >
 
@@ -60,12 +60,12 @@ ifconfig # 需要安裝net-tools
 
 先確認是否能與 ubuntu 的 ip 進行通訊：
 ``` batch
-ping ubuntu的IP
+ping your_ubuntu_IP
 # ping 192.168.1.57
 ```
 確認可以連線後：
 ```batch
-ssh ubuntu帳號@ubuntu的IP
+ssh your_ubuntu_username@your_ubuntu_IP
 # ssh test01@192.168.1.57
 ```
 

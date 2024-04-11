@@ -1,7 +1,6 @@
 import { arrayChunk } from "./utils/array.js";
 import { PaginatedData } from "./composables/index.js";
 
-123
 function getListedItemsInnerHTML(items, maxShowCount, getItemURL) {
   items = items.slice(0, maxShowCount);
   const chunkedItems = arrayChunk(items, Math.ceil(items.length / 2));

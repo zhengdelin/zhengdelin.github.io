@@ -45,7 +45,7 @@ systemctl status nginx
 
 接下來，我們可以在瀏覽器的地址欄輸入：
 ```plaintext
-http://你的IP
+http://your_IP
 ```
 便可以看到 Nginx 的預設頁面：
 
@@ -320,7 +320,7 @@ echo '<?php phpinfo();' | sudo tee /var/www/html/info.php
 
 接著在瀏覽器中查看以下網址：
 ```plaintext
-http://你的IP/info.php
+http://your_IP/info.php
 ```
 
 如果出現以下畫面則表示配置成功：

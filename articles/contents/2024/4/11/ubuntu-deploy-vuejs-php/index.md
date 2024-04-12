@@ -76,10 +76,10 @@ sudo systemctl reload nginx
 ```
 
 
-將 `/var/www/your_folder_name` 的**資料夾以及底下所有檔案**，的權限設定至少為 **644**，請執行以下指令變更檔案權限</font>
+將 `/var/www/your_folder_name` 的**資料夾以及底下所有檔案**，的權限設定至少為 **755**，請執行以下指令變更檔案權限</font>
 
 ```shell
-sudo chmod 644 /var/www/your_folder_name -R
+sudo chmod 755 /var/www/your_folder_name -R
 ```
 
 

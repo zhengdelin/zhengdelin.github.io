@@ -2,10 +2,10 @@
 
 要部署前端 Vue.js 和後端 PHP，
 需要將專案檔案上傳至伺服器，
-上傳方式可使用 github、ftp等。
+上傳方式可使用 github、ftp 等。
 
->參考文章： <a data-article-id="ubuntu-install-ftp"></a>
-參考文章： <a data-article-id="ubuntu-install-git"></a>
+>參考文章： <a data-article-id="20240411-ubuntu-install-ftp"></a>
+參考文章： <a data-article-id="20240411-ubuntu-install-git"></a>
 
 
 ## 部署 PHP
@@ -13,22 +13,22 @@
 ### 1. 上傳 PHP 檔案
 
 使用github clone 或 ftp，
-將後端php檔案複製到 `/var/www/your_folder_name` 底下
+將後端php檔案複製到 `/var/www/your_folder_name` 底下。
 
 ### 2. 配置 Nginx
 
 接著我們需要新增一個 nginx 虛擬主機，
 在 `/etc/nginx/sites-available/` 目錄底下建立一個檔案，
-名稱即為上個步驟中的 `your_folder_name`，
-以下會以 /var/www/backend 做為範例，
-新建一個 /var/www/backend 相對應的 nginx 虛擬主機配置：
+名稱即為上個步驟中的 `your_folder_name`：
+
+>※ 在上個步驟中複製的資料夾為 `/var/www/backend`，在此步驟中則要建立 `/etc/nginx/sites-available/backend`
 
 ```shell
-nano /etc/nginx/sites-available/backend
+nano /etc/nginx/sites-available/your_folder_name
 ```
 
 接著貼上以下配置，
-設置入口為 /var/www/backend，
+設置入口為 `/var/www/your_folder_name`，
 由於我們只有一個 IP，
 為了不與前端專案的 port 衝突，
 因此將 Port 設置為 8888，
@@ -36,7 +36,7 @@ nano /etc/nginx/sites-available/backend
 server {
         listen 8888;
 
-        root /var/www/backend;
+        root /var/www/your_folder_name;
 
         index index.html index.htm index.php index.nginx-debian.html;
 
@@ -58,8 +58,8 @@ server {
 ```
 
 建立軟連結，將檔案同步到 sites-enabled
-```
-sudo ln -s /etc/nginx/sites-available/backend /etc/nginx/sites-enabled/
+```shell
+sudo ln -s /etc/nginx/sites-available/your_folder_name /etc/nginx/sites-enabled/
 ```
 
 接著使用 `sudo nginx -t` 檢查設定檔格式有沒有錯誤，
@@ -75,6 +75,15 @@ nginx: configuration file /etc/nginx/nginx.conf test is successful
 sudo systemctl reload nginx
 ```
 
+
+將 `/var/www/your_folder_name` 的**資料夾以及底下所有檔案**，的權限設定至少為 **644**，請執行以下指令變更檔案權限</font>
+
+```shell
+sudo chmod 644 /var/www/your_folder_name -R
+```
+
+
+
 ## 部署前端 Vue.js
 
 ### 1. 上傳打包後的檔案
@@ -86,18 +95,20 @@ sudo systemctl reload nginx
 
 新增一個 nginx 虛擬主機，
 在 `/etc/nginx/sites-available/` 目錄底下建立一個檔案，
-以下會以 /var/www/frontend 為例：
+名稱即為上個步驟中的 `your_folder_name`：
+
+>※ 在上個步驟中複製的資料夾為 `/var/www/frontend`，在此步驟中則要建立 `/etc/nginx/sites-available/frontend`
 
 ```shell
-nano /etc/nginx/sites-available/backend
+nano /etc/nginx/sites-available/your_folder_name
 ```
 
-接著貼上以下配置，設置入口為 /var/www/frontend：
+接著貼上以下配置，設置入口為 `/var/www/your_folder_name`：
 ```shell
 server {
-        listen 80;
+        listen 80 default_server;
 
-        root /var/www/frontend;
+        root /var/www/your_folder_name;
 
         index index.html index.htm index.php index.nginx-debian.html;
 
@@ -118,20 +129,30 @@ server {
 }
 ```
 
-建立軟連結，將檔案同步到sites-enabled：
-```shell
-sudo ln -s /etc/nginx/sites-available/frontend /etc/nginx/sites-enabled/
-```
+`listen 80 default_server;` 這個設定值的 `default_server` 表示做為 nginx 的預設伺服器，
+而 nginx 預設是以 `/etc/nginx/sites-enabled/default` 做為預設伺服器，
+因此我們要刪除 `/etc/nginx/sites-enabled/default` 此檔案，
+才能避免預設伺服器衝突，
+執行以下指令來刪除軟連結：
 
-接著使用 `sudo nginx -t` 檢查設定檔格式有沒有錯誤。
 
-由於這個虛擬主機要作為nginx的 default server，
-因此我們要刪除 sites-enables 中的 default：
 
 ```shell
 sudo rm /etc/nginx/sites-enabled/default
 ```
 
+建立軟連結，將檔案同步到sites-enabled：
+```shell
+sudo ln -s /etc/nginx/sites-available/your_folder_name /etc/nginx/sites-enabled/
+```
+
+接著使用 `sudo nginx -t` 檢查設定檔格式有沒有錯誤。
 最後使用 `sudo systemctl reload nginx` 重啟服務。
 
+將 `/var/www/your_folder_name` 的**資料夾以及底下所有檔案**，的權限設定至少為 **644**，請執行以下指令變更檔案權限</font>
 
+```shell
+sudo chmod 644 /var/www/your_folder_name -R
+```
+
+這樣便已經部署完前端後端， `http://your_IP/` 為你的前端網址， `http://your_IP:8888` 為你的後端網址

@@ -124,7 +124,10 @@
     "date": "2024-04-10",
     "tags": ["Ubuntu"],
     "categories": ["Linux"],
-    "type": "md"
+    "type": "md",
+    "mdConfig": {
+      "highlightContents": ["your_ubuntu_IP", "your_ubuntu_username"]
+    }
   },
   {
     "id": "ubuntu-adduser",
@@ -132,7 +135,10 @@
     "date": "2024-04-10",
     "tags": ["Ubuntu"],
     "categories": ["Linux"],
-    "type": "md"
+    "type": "md",
+    "mdConfig": {
+      "highlightContents": ["your_user_name", "your_home_directory"]
+    }
   },
   {
     "id": "ubuntu-install-nginx、mysql、php",
@@ -140,7 +146,10 @@
     "date": "2024-04-10",
     "tags": ["Ubuntu"],
     "categories": ["Linux"],
-    "type": "md"
+    "type": "md",
+    "mdConfig": {
+      "highlightContents": ["your_IP"]
+    }
   },
   {
     "id": "ubuntu-install-ftp",
@@ -156,7 +165,14 @@
     "date": "2024-04-11",
     "tags": ["Ubuntu"],
     "categories": ["Linux"],
-    "type": "md"
+    "type": "md",
+    "mdConfig": {
+      "highlightContents": [
+        "your_user_name",
+        "your_user_email",
+        "user@example.com"
+      ]
+    }
   },
 
   {
@@ -165,7 +181,10 @@
     "date": "2024-04-11",
     "tags": ["Ubuntu"],
     "categories": ["Linux"],
-    "type": "md"
+    "type": "md",
+    "mdConfig": {
+      "highlightContents": ["your_db_name", "your_user_name", "your_password"]
+    }
   },
   {
     "id": "ubuntu-mysql-import-export",
@@ -173,7 +192,16 @@
     "date": "2024-04-11",
     "tags": ["Ubuntu"],
     "categories": ["Linux"],
-    "type": "md"
+    "type": "md",
+    "mdConfig": {
+      "highlightContents": [
+        "your_db_name",
+        "your_account",
+        "your_table_name ",
+        "your_file_name",
+        "source_file_name"
+      ]
+    }
   },
   {
     "id": "ubuntu-deploy-vuejs-php",
@@ -181,6 +209,9 @@
     "date": "2024-04-11",
     "tags": ["Ubuntu"],
     "categories": ["Linux"],
-    "type": "md"
+    "type": "md",
+    "mdConfig": {
+      "highlightContents": ["your_folder_name"]
+    }
   }
 ]

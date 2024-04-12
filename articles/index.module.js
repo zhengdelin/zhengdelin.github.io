@@ -2,8 +2,159 @@ import { formatTime } from "../utils/time.js";
 
 /**
  * @typedef MDConfig
- * @property {boolean} removeH1
+ * @property {boolean} [removeH1]
+ * @property {string[] | string} [highlightContents] 高亮文字內容 僅在 `pre code` 標籤中生效，若為 array 表示替換多組文字，若為 string 表示替換單組文字或 regexp
+ * @property {Record<string, string>} [highlightContentsStyles]
  */
+
+class TemplateStringParser {
+  /** @type {Record<string, string>} */
+  variables;
+  /** @type {RegExp} */
+  format;
+  /** @type {(substring: string, ...args: any[]) => string)} */
+  _replacer;
+
+  /**
+   * @param {Object} param0
+   * @param {TemplateStringParser['variables']} [param0.variables]
+   * @param {TemplateStringParser['format']} [param0.format]
+   * @param {TemplateStringParser['_replacer']} [param0.replacer]
+   * @
+   */
+  constructor({ variables = {}, format = /\{\{(.*?)\}\}/g, replacer }) {
+    this.variables = variables;
+    this.format = format instanceof RegExp ? format : new RegExp(format, "g");
+    this._replacer =
+      replacer ||
+      ((_, v) => {
+        return this.variables[v];
+      });
+  }
+
+  setVariable(key, value) {
+    this.variables[key] = value;
+  }
+
+  /**
+   * @returns
+   */
+  replace(text) {
+    if (!text) return "";
+    return text.replace(this.format, this._replacer);
+  }
+}
+
+class MDParser {
+  marked;
+  /** @type {MDConfig} */
+  config;
+  /** @type {TemplateStringParser} */
+  templateStringParser;
+  /** @type {(id:any)=>({href:string, content:string} | null)} */
+  getArticleLink;
+
+  /**
+   * @param {Object} param0
+   * @param {MDParser['marked']} param0.marked
+   * @param {MDParser['config']} [param0.config]
+   * @param {MDParser['templateStringParser']} param0.templateStringParser
+   * @param {MDParser['getArticleLink']} param0.getArticleLink
+   */
+  constructor({ marked, config = {}, templateStringParser, getArticleLink }) {
+    this.marked = marked;
+    this.config = config;
+    this.templateStringParser = templateStringParser;
+    this.getArticleLink = getArticleLink;
+  }
+
+  /**
+   *
+   * @param {HTMLImageElement[]} images
+   * @returns
+   */
+  replaceImagesSrc(images) {
+    for (const img of images) {
+      const datasetSrc = img.dataset.src;
+      if (!datasetSrc) continue;
+      img.src = this.templateStringParser.replace(datasetSrc);
+    }
+  }
+
+  handleArticleLinks(links) {
+    for (const link of links) {
+      const articleId = link.dataset.articleId;
+      if (!articleId) continue;
+      const result = this.getArticleLink(articleId);
+      if (!result) continue;
+
+      link.href = result.href;
+      link.innerHTML = result.content;
+    }
+  }
+  get highlightContentsRegex() {
+    if (!this.config.highlightContents) return null;
+    if (Array.isArray(this.config.highlightContents))
+      return new RegExp(
+        `(${this.config.highlightContents.map((x) => x).join("|")})`,
+        "g"
+      );
+    if (typeof this.config.highlightContents === "string")
+      return new RegExp(this.config.highlightContents, "g");
+    if (this.config.highlightContents instanceof RegExp)
+      return this.config.highlightContents;
+    return null;
+  }
+
+  get highlightContentsStyleString() {
+    if (!this.config.highlightContentsStyles) return "";
+    return Object.entries(this.config.highlightContentsStyles)
+      .map(([k, v]) => `${k}:${v}`)
+      .join(";");
+  }
+  getReplacedHighlightContent(content) {
+    const regex = this.highlightContentsRegex;
+    if (!regex) return content;
+    const templateStringParser = new TemplateStringParser({
+      format: regex,
+      replacer: (substring, ...args) => {
+        return `<span style="${this.highlightContentsStyleString}">${substring}</span>`;
+      },
+    });
+
+    return templateStringParser.replace(content);
+  }
+
+  replaceHighlightContents(codeBlocks) {
+    for (const codeBlock of codeBlocks) {
+      codeBlock.innerHTML = this.getReplacedHighlightContent(
+        codeBlock.innerHTML
+      );
+    }
+  }
+
+  /**
+   *
+   * @param {string} content
+   * @returns
+   */
+  parse(content) {
+    const parsedContent = this.marked?.parse(content, { breaks: true });
+    const div = document.createElement("div");
+    div.innerHTML = parsedContent;
+    if (this.config.removeH1) {
+      div.querySelectorAll("h1").forEach((h1) => {
+        h1.remove();
+      });
+    }
+
+    this.replaceImagesSrc(div.querySelectorAll("img"));
+    this.handleArticleLinks(div.querySelectorAll("a"));
+
+    this.replaceHighlightContents(div.querySelectorAll("pre code"));
+    return div.innerHTML;
+  }
+}
 
 class Article {
   /** @type {string} */
@@ -61,22 +212,26 @@ class Article {
   /**
    *
    * @param {ArticleCreateArgs} param0
+   * @param {() => ArticleManager} getArticleManager
    */
-  constructor({
-    id,
-    title,
-    date,
-    type = "html",
-    fileFolderPath,
-    filename,
-    tags = [],
-    categories = [],
-    description = "",
-    asIframe = false,
-    iframeAttrs = {},
-    marked,
-    mdConfig = {},
-  }) {
+  constructor(
+    {
+      id,
+      title,
+      date,
+      type = "html",
+      fileFolderPath,
+      filename,
+      tags = [],
+      categories = [],
+      description = "",
+      asIframe = false,
+      iframeAttrs = {},
+      marked,
+      mdConfig = {},
+    },
+    getArticleManager
+  ) {
     this._id = id;
     this.title = title;
     this.description = description;
@@ -90,10 +245,32 @@ class Article {
     this.asIframe = asIframe;
     this.iframeAttrs = iframeAttrs;
     this.marked = marked;
-    this.mdConfig = { removeH1: true, ...mdConfig };
+    this.mdConfig = {
+      removeH1: true,
+      highlightContentsStyles: {
+        color: "red",
+        // "font-weight": "bold",
+      },
+      ...mdConfig,
+    };
+    this.getArticleManager = getArticleManager;
   }
 
-  async getContent(articlesFolderPath = ".") {
+  get articleManager() {
+    return this.getArticleManager();
+  }
+
+  /**
+   *
+   * @param {object} [args]
+   * @param {string} [args.articlesFolderPath]
+   * @param {(article:Article) => string} [args.getArticleURL]
+   * @returns
+   */
+  async getContent({
+    articlesFolderPath = ".",
+    getArticleURL = ({ id }) => `../articles/index.html?id=${id}`,
+  } = {}) {
     const type = this.type;
     const filename = this.filename || `index.${type}`;
     const folderPath =
@@ -106,53 +283,47 @@ class Article {
     const filePath = `${fullFolderPath}/${filename}`;
 
     if (this.asIframe) {
-      const iframeAttrs = { ...this.iframeAttrs };
-      iframeAttrs.src ||= filePath;
-      iframeAttrs.title ||= this.title;
+      const iframeAttrs = {
+        src: filePath,
+        title: this.title,
+        ...this.iframeAttrs,
+      };
       return `<iframe ${Object.entries(iframeAttrs)
         .map(([k, v]) => `${k}="${v}"`)
         .join(" ")}></iframe>`;
     }
 
     try {
-      const replaceVariables = {
-        curFolderPath: fullFolderPath,
-        articlesFolderPath,
-      };
-      const replaceTemplateStrings = (text, variables) => {
-        if (!text || !variables) return "";
-        return text.replace(/\{\{(.*?)\}\}/g, (_, v) => replaceVariables[v]);
-      };
+      const templateStringParser = new TemplateStringParser({
+        variables: {
+          curFolderPath: fullFolderPath,
+          articlesFolderPath,
+        },
+      });
 
       const res = await fetch(filePath);
-      const content = replaceTemplateStrings(
-        await res.text(),
-        replaceVariables
-      );
-
-      const handleImageSrc = (div) => {
-        for (const img of div.querySelectorAll("img")) {
-          const datasetSrc = img.dataset.src;
-          if (!datasetSrc) return;
-          img.src = replaceTemplateStrings(datasetSrc, replaceVariables);
-        }
-      };
+      const content = templateStringParser.replace(await res.text());
 
       if (this.isHTML) {
         return content;
       } else if (this.isMD) {
-        const parsedContent = this.marked?.parse(content, { breaks: true });
-        const div = document.createElement("div");
-        div.innerHTML = parsedContent;
-        if (this.mdConfig.removeH1) {
-          div.querySelectorAll("h1").forEach((h1) => {
-            h1.remove();
-          });
-        }
-
-        handleImageSrc(div);
-        return div.innerHTML;
+        const parser = new MDParser({
+          marked: this.marked,
+          config: this.mdConfig,
+          templateStringParser: templateStringParser,
+          getArticleLink: (id) => {
+            const article = this.articleManager.getArticle(id);
+            return article
+              ? {
+                  content: article.title,
+                  href: getArticleURL(article),
+                }
+              : null;
+          },
+        });
+        return parser.parse(content);
       }
+      return "";
     } catch (error) {
       console.error(error);
       return `Error: 發現問題，請聯繫作者。`;
@@ -160,9 +331,7 @@ class Article {
   }
 
   get id() {
-    return `${formatTime(this.date, "yyyyMMDD", {
-      isPad: true,
-    })}-${this._id}`;
+    return `${formatTime(this.date, "yyyyMMDD")}-${this._id}`;
   }
 
   get isHTML() {
@@ -195,7 +364,7 @@ class ArticleManager {
    * @returns
    */
   addArticle(args) {
-    const article = new Article({ ...args, marked: this.marked });
+    const article = new Article({ ...args, marked: this.marked }, () => this);
     this.articles.push(article);
     this.articlesMap[article.id] = article;
     return article;
@@ -315,7 +484,11 @@ class ArticleRenderer {
    * @param {boolean} isRight
    * @param {ArticleRendererArgs['getArticleURL']} getArticleURL
    */
-  static createTimelineItem(article, isRight, getArticleURL) {
+  static createTimelineItem(
+    article,
+    isRight,
+    getArticleURL = (article) => `../articles/index.html?id=${article.id}`
+  ) {
     const div = document.createElement("div");
     div.className = `col-sm-6 timeline-item ${isRight ? "right" : ""}`;
     div.innerHTML = `
@@ -354,7 +527,11 @@ class ArticleRenderer {
    *
    * @param {ArticleRendererArgs} param0
    */
-  static renderArticlesTimeline({ container, articles, getArticleURL }) {
+  static renderArticlesTimeline({
+    container,
+    articles,
+    getArticleURL = (article) => `../articles/index.html?id=${article.id}`,
+  }) {
     const timeline = document.createElement("div");
     timeline.classList.add("timeline");
     container.appendChild(timeline);

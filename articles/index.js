@@ -65,7 +65,9 @@ import { useTagManager } from "../tags/index.module.js";
     if (article.isMD) {
       section.classList.add("revert-browser-stylesheet");
     }
-    section.innerHTML = await article.getContent();
+    section.innerHTML = await article.getContent({
+      getArticleURL,
+    });
     ArticleRenderer.renderArticleCodeLineNumbersBlock(section, hljs);
     return section;
   }
@@ -142,16 +144,15 @@ import { useTagManager } from "../tags/index.module.js";
   const marked = new Marked(
     markedHighlight.markedHighlight({
       langPrefix: "hljs language-",
-      highlight(code, lang, info) {
+      highlight(code, lang, _info) {
         const language = hljs.getLanguage(lang) ? lang : "plaintext";
         const text = hljs.highlight(code, { language }).value;
         return text;
       },
     })
   );
-  const articleManager = new ArticleManager(marked);
-  await articleManager.fetchArticles();
-  const articles = articleManager.articles;
+
+  const { articleManager, articles } = await useArticleManager({ marked });
 
   // 調整動畫
   const startLabelName = "start";

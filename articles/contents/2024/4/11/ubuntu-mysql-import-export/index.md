@@ -15,7 +15,7 @@ mysqldump -u your_account -p your_db_name your_table_name > your_file_name.sql
 ## 新建資料庫
 
 ```shell
-mysql> CREATE DATABASE your_database_name;
+mysql> CREATE DATABASE your_db_name;
 ```
 
 ## 匯入整個資料庫

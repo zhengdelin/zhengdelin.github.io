@@ -1,10 +1,12 @@
-import { ArticleManager, ArticleRenderer } from "../articles/index.module.js";
-import { articles as _articles } from "../articles/export.js";
+import {
+  ArticleRenderer,
+  useArticleManager,
+} from "../articles/index.module.js";
 import "../app.js";
 /**********************Scroll Animation "END"************************************/
 
 (async () => {
-  const articleManager = new ArticleManager(_articles);
+  const { articleManager } = await useArticleManager();
   const articles = articleManager.getArticlesByCategory("動態網頁設計");
 
   ArticleRenderer.renderArticlesTimeline({

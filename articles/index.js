@@ -1,11 +1,17 @@
 import { appTimeline } from "../app.js";
 import { useBranch, useHeadTitle, useRouter } from "../composables/index.js";
-import { Article, ArticleRenderer, ArticleManager } from "./index.module.js";
+import {
+  Article,
+  ArticleRenderer,
+  ArticleManager,
+  useArticleManager,
+} from "./index.module.js";
 import { AsideRenderer } from "../renderer.module.js";
-import { articles as _articles, categories, tags } from "../exports.js";
 
 import { Marked } from "https://cdn.jsdelivr.net/npm/marked/lib/marked.esm.js";
 import "https://cdn.jsdelivr.net/npm/marked-highlight@2.1.1/lib/index.umd.min.js";
+import { useCategoryManager } from "../categories/index.module.js";
+import { useTagManager } from "../tags/index.module.js";
 
 (async () => {
   const rootContainer = document.querySelector("article");
@@ -143,7 +149,8 @@ import "https://cdn.jsdelivr.net/npm/marked-highlight@2.1.1/lib/index.umd.min.js
       },
     })
   );
-  const articleManager = new ArticleManager(_articles, marked);
+  const articleManager = new ArticleManager(marked);
+  await articleManager.fetchArticles();
   const articles = articleManager.articles;
 
   // 調整動畫
@@ -177,7 +184,11 @@ import "https://cdn.jsdelivr.net/npm/marked-highlight@2.1.1/lib/index.umd.min.js
       });
       ArticleRenderer.initAnimation();
     },
-    onFinally() {
+    async onFinally() {
+      const [{ categories }, { tags }] = await Promise.all([
+        useCategoryManager(),
+        useTagManager(),
+      ]);
       const asideRenderer = new AsideRenderer(appTimeline);
       asideRenderer.renderCategories({
         items: categories,

@@ -1,14 +1,19 @@
 import { AsideRenderer } from "./renderer.module.js";
-import { Article, ArticleManager } from "./articles/index.module.js";
+import { Article, useArticleManager } from "./articles/index.module.js";
 import { arrayChunk } from "./utils/array.js";
 import { usePaginatedData, useRouter } from "./composables/index.js";
-import { categories, tags, articles as _articles } from "./exports.js";
 import { PaginationRenderer } from "./renderer.module.js";
 import { appTimeline } from "./app.js";
+import { useCategoryManager } from "./categories/index.module.js";
+import { useTagManager } from "./tags/index.module.js";
 (async () => {
   const getArticleURL = (article) => `./articles/index.html?id=${article.id}`;
 
-  const articleManager = new ArticleManager(_articles);
+  const [{ articleManager }, { tags }, { categories }] = await Promise.all([
+    useArticleManager({ filepath: "./data/articles.json" }),
+    useTagManager({ filepath: "./data/tags.json" }),
+    useCategoryManager({ filepath: "./data/categories.json" }),
+  ]);
   const articles = articleManager.sortArticlesByDate();
   const asideRenderer = new AsideRenderer(
     appTimeline,

@@ -182,13 +182,12 @@ class ArticleManager {
   /** @type {Article[]} */
   articles = [];
 
-  constructor(articles = [], marked = null) {
+  constructor(marked = null) {
     /**
      * @type {Record<Article['id'], Article>}
      */
     this.articlesMap = {};
     this.marked = marked;
-    this.addArticles(articles);
   }
 
   /**
@@ -285,6 +284,13 @@ class ArticleManager {
       }
       return b.date > a.date ? 1 : -1;
     });
+  }
+
+  async fetchArticles(filepath = "../data/articles.json") {
+    const res = await fetch(filepath);
+    const articles = await res.json();
+    this.addArticles(articles);
+    return this.articles;
   }
 }
 
@@ -410,4 +416,13 @@ class ArticleRenderer {
   }
 }
 
-export { Article, ArticleManager, ArticleRenderer };
+async function useArticleManager({ marked, filepath, fetch = true } = {}) {
+  const articleManager = new ArticleManager(marked);
+  if (fetch) await articleManager.fetchArticles(filepath);
+  return {
+    articleManager,
+    articles: articleManager.articles,
+  };
+}
+
+export { Article, ArticleManager, ArticleRenderer, useArticleManager };

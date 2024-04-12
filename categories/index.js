@@ -1,6 +1,8 @@
-import { categories } from "./export.js";
-import { ArticleManager, ArticleRenderer } from "../articles/index.module.js";
-import { articles as _articles } from "../articles/export.js";
+import {
+  ArticleManager,
+  ArticleRenderer,
+  useArticleManager,
+} from "../articles/index.module.js";
 import { AsideRenderer, PaginationRenderer } from "../renderer.module.js";
 import {
   useBranch,
@@ -8,15 +10,16 @@ import {
   usePaginatedData,
   useRouter,
 } from "../composables/index.js";
-import { tags } from "../tags/export.js";
 import { appTimeline } from "../app.js";
+import { useTagManager } from "../tags/index.module.js";
+import { useCategoryManager } from "./index.module.js";
 
 const getURL = (category) => `index.html?id=${category}`;
 const id = new URL(location.href).searchParams.get("id");
 
 const container = document.querySelector("#contents");
 
-const articleManager = new ArticleManager(_articles);
+const { articleManager } = await useArticleManager();
 const asideRenderer = new AsideRenderer(appTimeline);
 
 appTimeline.from(container, {
@@ -27,7 +30,8 @@ appTimeline.from(container, {
 });
 
 useBranch(id, {
-  onFalse() {
+  async onFalse() {
+    const { categories } = await useCategoryManager();
     const articleCounts = articleManager.articleCountsByCategory;
     // layout
     const header = document.createElement("header");
@@ -116,7 +120,7 @@ useBranch(id, {
     render(paginatedData.items);
   },
 
-  onTrue() {
+  async onTrue() {
     const header = document.createElement("h1");
     header.className = "fw-bolder";
 
@@ -128,7 +132,6 @@ useBranch(id, {
     header.appendChild(document.createTextNode("分類：" + id));
     container.appendChild(header);
 
-    const articleManager = new ArticleManager(_articles);
     ArticleRenderer.renderArticlesTimeline({
       container,
       articles: articleManager.getArticlesByCategory(id),
@@ -137,7 +140,8 @@ useBranch(id, {
     ArticleRenderer.initAnimation();
   },
 
-  onFinally() {
+  async onFinally() {
+    const { tags } = await useTagManager();
     asideRenderer.renderTags({
       items: tags,
       getURL: (tag) => `../tags/index.html?id=${tag}`,

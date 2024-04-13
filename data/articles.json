@@ -213,5 +213,69 @@
     "mdConfig": {
       "highlightContents": ["your_folder_name"]
     }
+  },
+  {
+    "id": "shell-introduction",
+    "title": "[ShellScript學習紀錄01] - 基本介紹",
+    "date": "2024-04-13",
+    "tags": ["ShellScript"],
+    "categories": ["Linux"],
+    "type": "md"
+  },
+  {
+    "id": "shell-basic-syntax",
+    "title": "[ShellScript學習紀錄02] - 基本語法",
+    "date": "2024-04-13",
+    "tags": ["ShellScript"],
+    "categories": ["Linux"],
+    "type": "md"
+  },
+  {
+    "id": "shell-variables",
+    "title": "[ShellScript學習紀錄03] - 變數",
+    "date": "2024-04-13",
+    "tags": ["ShellScript"],
+    "categories": ["Linux"],
+    "type": "md"
+  },
+  {
+    "id": "shell-numeric-operations",
+    "title": "[ShellScript學習紀錄04] - 數值運算",
+    "date": "2024-04-13",
+    "tags": ["ShellScript"],
+    "categories": ["Linux"],
+    "type": "md"
+  },
+  {
+    "id": "shell-read",
+    "title": "[ShellScript學習紀錄05] - read 指令",
+    "date": "2024-04-13",
+    "tags": ["ShellScript"],
+    "categories": ["Linux"],
+    "type": "md"
+  },
+  {
+    "id": "shell-condition",
+    "title": "[ShellScript學習紀錄06] - 條件判斷",
+    "date": "2024-04-13",
+    "tags": ["ShellScript"],
+    "categories": ["Linux"],
+    "type": "md"
+  },
+  {
+    "id": "shell-functions",
+    "title": "[ShellScript學習紀錄07] - 函數",
+    "date": "2024-04-13",
+    "tags": ["ShellScript"],
+    "categories": ["Linux"],
+    "type": "md"
+  },
+  {
+    "id": "shell-$(())-vs-(())",
+    "title": "[ShellScript學習紀錄08] - $(( )) vs (( ))",
+    "date": "2024-04-13",
+    "tags": ["ShellScript"],
+    "categories": ["Linux"],
+    "type": "md"
   }
 ]

@@ -4,12 +4,12 @@
 
 更新 apt 套件列表以及安裝 git：
 
-``` shell
+```bash
 sudo apt update && sudo apt install git
 ```
 
 使用 `git --version` 指令檢查已安裝的 git 版本：
-```shell
+```bash
 git version 2.34.1
 ```
 
@@ -17,13 +17,13 @@ git version 2.34.1
 
 使用以下指令來配置 git 使用者的 name 和 email：
 
-```shell
+```bash
 git config --global user.name "your_user_name"
 git config --global user.email "your_user_email"
 ```
 
 使用 `git config --list` 來驗證配置：
-```shell
+```bash
 user.name=test
 user.email=test@gmail.com
 ```
@@ -34,7 +34,7 @@ user.email=test@gmail.com
 
 ### 1. 生成 SSH key
 使用以下指令生成 SSH key：
-```shell
+```bash
 ssh-keygen -t ed25519 -C "user@example.com"
 ```
 * `-t` 表示指定要生成的 key 的類型，此處為 ed25519
@@ -45,19 +45,19 @@ ssh-keygen -t ed25519 -C "user@example.com"
 <img src="image.png" data-src="{{curFolderPath}}/image.png" />
 
 可以使用 `ls ~/.ssh` 查看生成的檔案：
-```shell
+```bash
 id_ed25519  id_ed25519.pub
 ```
 
 使用 `cat ~/.ssh/id_ed25519.pub` 查看 public key：
-```shell
+```bash
 ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIOoBoiamhpxhbL4r8gF4TP6B5K9LmuadIViCY+bREpbz test@gmail.com
 ```
 
 ### 2. 將 Public Key 新增至 Github Account
 
 執行 `cat ~/.ssh/id_ed25519.pub` 並複製至剪貼簿。
-```shell
+```bash
 ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIOoBoiamhpxhbL4r8gF4TP6B5K9LmuadIViCY+bREpbz test@gmail.com
 ```
 
@@ -89,19 +89,19 @@ ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIOoBoiamhpxhbL4r8gF4TP6B5K9LmuadIViCY+bREpbz
 
 ### 4. 指定 ssh-agent 的 SSH Key
 如果你不想每次 Clone 的時候都輸入密碼，可以將金鑰新增至 SSH 代理程式管理的金鑰清單，首先先使用以下命令確保 SSH 代理正在執行：
-```shell
+```bash
 eval "$(ssh-agent -s)"
 ```
 執行結果：
-```shell
+```bash
 Agent pid 2284
 ```
 
 然後使用以下命令添加私鑰文件：
-```shell
+```bash
 ssh-add ~/.ssh/id_ed25519
 ```
 執行結果：
-```shell
+```bash
 Identity added: /home/test01/.ssh/id_ed25519 (test01@gmail.com)
 ```

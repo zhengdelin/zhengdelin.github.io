@@ -2,23 +2,23 @@
 
 ## 匯出整個資料庫
 
-```shell
+```bash
 mysqldump -u your_account -p your_db_name > your_file_name.sql
 ```
 
 ## 匯出單張資料表
 
-```shell
+```bash
 mysqldump -u your_account -p your_db_name your_table_name > your_file_name.sql
 ```
 
 ## 新建資料庫
 
-```shell
+```bash
 mysql> CREATE DATABASE your_db_name;
 ```
 
 ## 匯入整個資料庫
-```shell
+```bash
 mysql -u your_account -p your_db_name < source_file_name.sql
 ```

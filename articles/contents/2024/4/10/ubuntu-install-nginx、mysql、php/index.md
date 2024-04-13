@@ -7,12 +7,12 @@ LEMP 軟體堆疊是一組軟體，可以用來提供使用 `PHP` 編寫的動�
 
 首先先更新一下 apt 套件清單，以便取得最新的套件資訊：
 
-```shell
+```bash
 sudo apt update
 ```
 
 然後安裝 nginx：
-```shell
+```bash
 sudo apt install nginx
 ```
 
@@ -22,11 +22,11 @@ sudo apt install nginx
 
 ### 1-2 測試 Nginx
 檢查Nginx是否正在運行：
-```shell
+```bash
 systemctl status nginx
 ```
 若得到以下結果(active)，表示 Nginx 正在運行
-```shell
+```bash
 ● nginx.service - A high performance web server and a reverse proxy server
      Loaded: loaded (/lib/systemd/system/nginx.service; enabled; vendor preset: enabled)
      Active: active (running) since Wed 2024-04-10 15:09:45 UTC; 32min ago
@@ -56,7 +56,7 @@ http://your_IP
 
 ## 2. 安裝 Mysql
 
-``` shell
+```bash
 sudo apt install mysql-server
 ```
 
@@ -67,14 +67,14 @@ sudo apt install mysql-server
 
 當安裝完成後，執行以下命令來進行安全設置：
 
-```shell
+```bash
 sudo mysql_secure_installation
 ```
 
 接下來你會被詢問是否想要配置 VALIDATE PASSWORD PLUGIN。
 回答 Y 表示是，或者輸入其他內容繼續而不啟用：
 
-```shell
+```bash
 Securing the MySQL server deployment.
 
 Connecting to MySQL using a blank password.
@@ -89,7 +89,7 @@ Press y|Y for Yes, any other key for No: y
 
 如果回答是，將會被要求選擇一個密碼等級：
 
-```shell
+```bash
 There are three levels of password validation policy:
 
 LOW    Length >= 8
@@ -102,7 +102,7 @@ Please enter 0 = LOW, 1 = MEDIUM and 2 = STRONG: 2
 
 Ubuntu 上 Mysql 管理使用者的預設認證方法是 auth_socket ，而不是使用密碼的方式，如果要修改認證方法，請使用 ALTER_USER 指令，相關內容請查看：[https://dev.mysql.com/doc/refman/8.0/en/alter-user.html#alter-user-password-management](https://dev.mysql.com/doc/refman/8.0/en/alter-user.html#alter-user-password-management)
 
-``` shell
+```bash
 Skipping password set for root as authentication with auth_socket is used by default.
 If you would like to use password authentication instead, this can be done with the "ALTER_USER" command.
 See https://dev.mysql.com/doc/refman/8.0/en/alter-user.html#alter-user-password-management for more information.
@@ -112,7 +112,7 @@ See https://dev.mysql.com/doc/refman/8.0/en/alter-user.html#alter-user-password-
 
 1. 刪除匿名用戶：
 
-```shell
+```bash
 By default, a MySQL installation has an anonymous user,
 allowing anyone to log into MySQL without having to have
 a user account created for them. This is intended only for
@@ -125,7 +125,7 @@ Success.
 ```
 
 2. 禁止遠程登入：
-```shell
+```bash
 Normally, root should only be allowed to connect from
 'localhost'. This ensures that someone cannot guess at
 the root password from the network.
@@ -135,7 +135,7 @@ Success.
 ```
 
 3. 移除測試資料表：
-```shell
+```bash
 By default, MySQL comes with a database named 'test' that
 anyone can access. This is also intended only for testing,
 and should be removed before moving into a production
@@ -151,7 +151,7 @@ Success.
 ```
 
 4. 重新加載權限表：
-```shell
+```bash
 Reloading the privilege tables will ensure that all changes
 made so far will take effect immediately.
 
@@ -160,17 +160,17 @@ Success.
 ```
 
 5. 完成：
-```shell
+```bash
 All done!
 ```
 
 完成後，測試是否能夠登入 MySQL 控制台：
-```shell
+```bash
 sudo mysql
 ```
 
 這樣會以管理資料庫使用者 root 身分 連接到 mysql 伺服器，成功後你應該會收到以下輸出：
-```shell
+```bash
 Welcome to the MySQL monitor.  Commands end with ; or \g.
 Your MySQL connection id is 16
 Server version: 8.0.36-0ubuntu0.22.04.1 (Ubuntu)
@@ -187,14 +187,14 @@ mysql>
 ```
 
 退出 MySQL 控制台：
-```shell
+```bash
 mysql> exit
 ```
 
 ## 3. 安裝 PHP
 
 執行以下指令安裝 PHP：
-```shell
+```bash
 sudo apt install php-fpm php-mysql
 ```
 
@@ -208,12 +208,12 @@ sudo apt install php-fpm php-mysql
 接下來我們要修改 Nginx 配置，使其解析到PHP檔時，將會使用php-fpm進行解析
 
 先取得取得 php-fpm 版本備用：
-```shell
+```bash
 apt-cache show php-fpm
 ```
 
 得到以下結果，此處版本即為 8.1：
-```shell
+```bash
 Package: php-fpm
 Architecture: all
 Version: 2:8.1+92ubuntu1
@@ -247,12 +247,12 @@ Description-md5: 2f8aa0d9c24f7f33d4218178375a12d2
 
 接著執行以下指令，進入到修改頁面：
 
-```shell
+```bash
 sudo nano /etc/nginx/sites-available/default
 ```
 
 你會看到以下內容(不含註釋)：
-``` shell
+```bash
 server {
         listen 80 default_server;
         listen [::]:80 default_server;
@@ -303,18 +303,18 @@ _**請注意**：fastcgi_pass unix:/run/php/php<font color="red">8.1</font>-fpm.
 
 修改完後，按下「Ctrl + X」，接著按下「Y」退出。
 接著使用 `sudo nginx -t` 檢查設定檔格式有沒有錯誤，如果顯示以下文字表示設定檔格式沒有錯誤：
-```shell
+```bash
 nginx: the configuration file /etc/nginx/nginx.conf syntax is ok
 nginx: configuration file /etc/nginx/nginx.conf test is successful
 ```
 
 重新載入 nginx 設定：
-```shell
+```bash
 sudo systemctl reload nginx
 ```
 
 接著輸入以下指令，產生info.php檔案：
-```shell
+```bash
 echo '<?php phpinfo();' | sudo tee /var/www/html/info.php
 ```
 

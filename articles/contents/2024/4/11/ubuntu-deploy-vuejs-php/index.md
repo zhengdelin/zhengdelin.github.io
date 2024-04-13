@@ -23,7 +23,7 @@
 
 >※ 在上個步驟中複製的資料夾為 `/var/www/backend`，在此步驟中則要建立 `/etc/nginx/sites-available/backend`
 
-```shell
+```bash
 nano /etc/nginx/sites-available/your_folder_name
 ```
 
@@ -32,7 +32,7 @@ nano /etc/nginx/sites-available/your_folder_name
 由於我們只有一個 IP，
 為了不與前端專案的 port 衝突，
 因此將 Port 設置為 8888，
-```shell
+```bash
 server {
         listen 8888;
 
@@ -58,27 +58,27 @@ server {
 ```
 
 建立軟連結，將檔案同步到 sites-enabled
-```shell
+```bash
 sudo ln -s /etc/nginx/sites-available/your_folder_name /etc/nginx/sites-enabled/
 ```
 
 接著使用 `sudo nginx -t` 檢查設定檔格式有沒有錯誤，
 如果顯示以下文字表示設定檔格式沒有錯誤：
 
-```shell
+```bash
 nginx: the configuration file /etc/nginx/nginx.conf syntax is ok
 nginx: configuration file /etc/nginx/nginx.conf test is successful
 ```
 
 最後重啟 nginx 服務：
-```shell
+```bash
 sudo systemctl reload nginx
 ```
 
 
 將 `/var/www/your_folder_name` 的**資料夾以及底下所有檔案**，的權限設定至少為 **755**，請執行以下指令變更檔案權限</font>
 
-```shell
+```bash
 sudo chmod 755 /var/www/your_folder_name -R
 ```
 
@@ -99,12 +99,12 @@ sudo chmod 755 /var/www/your_folder_name -R
 
 >※ 在上個步驟中複製的資料夾為 `/var/www/frontend`，在此步驟中則要建立 `/etc/nginx/sites-available/frontend`
 
-```shell
+```bash
 nano /etc/nginx/sites-available/your_folder_name
 ```
 
 接著貼上以下配置，設置入口為 `/var/www/your_folder_name`：
-```shell
+```bash
 server {
         listen 80 default_server;
 
@@ -137,12 +137,12 @@ server {
 
 
 
-```shell
+```bash
 sudo rm /etc/nginx/sites-enabled/default
 ```
 
 建立軟連結，將檔案同步到sites-enabled：
-```shell
+```bash
 sudo ln -s /etc/nginx/sites-available/your_folder_name /etc/nginx/sites-enabled/
 ```
 
@@ -151,7 +151,7 @@ sudo ln -s /etc/nginx/sites-available/your_folder_name /etc/nginx/sites-enabled/
 
 將 `/var/www/your_folder_name` 的**資料夾以及底下所有檔案**，的權限設定至少為 **644**，請執行以下指令變更檔案權限</font>
 
-```shell
+```bash
 sudo chmod 644 /var/www/your_folder_name -R
 ```
 

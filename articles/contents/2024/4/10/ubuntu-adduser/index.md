@@ -7,7 +7,7 @@
 
 ## 使用 adduser 新增使用者
 
-``` shell
+```bash
 # 新增使用者
 sudo adduser your_user_name
 ```
@@ -22,20 +22,20 @@ sudo adduser your_user_name
 
 若要將該使用者加入某個群組，例如加入 `sudo` ，使該使用者可以執行 sudo 指令：
 
-``` shell
+```bash
 sudo adduser your_user_name sudo
 ```
 
 ## 更改使用者的Home目錄
 
 若要修改使用者的目錄，可以使用以下指令：
-```shell
+```bash
 sudo usermod -d /your_home_directory your_user_name
 ```
 
 ## 切換當前使用者
 
 使用以下指令切換當前使用者：
-``` shell
+```bash
 su your_user_name
 ```

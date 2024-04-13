@@ -63,7 +63,7 @@ import { useTagManager } from "../tags/index.module.js";
     const section = document.createElement("section");
     section.classList.add("mb-5");
     if (article.isMD) {
-      section.classList.add("revert-browser-stylesheet");
+      section.classList.add("revert-browser-stylesheet", "markdown");
     }
     section.innerHTML = await article.getContent({
       getArticleURL,

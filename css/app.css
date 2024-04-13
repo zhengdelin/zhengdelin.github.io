@@ -1750,6 +1750,24 @@
 }
 /**************Animation CSS End Here****************/
 
+.markdown blockquote {
+  padding: 10px 20px;
+  margin: 0 0 20px;
+  font-size: 17.5px;
+  border-left: 5px solid #eee;
+}
+
+.markdown > table,
+.markdown > table th,
+.markdown > table td {
+  border: 1px solid black;
+}
+
+.markdown > table th,
+.markdown > table td {
+  padding: 8px 12px;
+}
+
 .revert-browser-stylesheet,
 .revert-browser-stylesheet p,
 .revert-browser-stylesheet h1,
@@ -1758,7 +1776,6 @@
 .revert-browser-stylesheet h4,
 .revert-browser-stylesheet h5,
 .revert-browser-stylesheet h6,
-.revert-browser-stylesheet blockquote,
 .revert-browser-stylesheet pre {
   line-height: revert;
   font-size: revert;

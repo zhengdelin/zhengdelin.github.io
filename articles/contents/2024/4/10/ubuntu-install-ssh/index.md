@@ -3,22 +3,22 @@
 ## 查看系統有無安裝 ssh server 服務
 
 執行以下指令：
-``` shell
+```bash
 systemctl status ssh
 ```
 如果出現以下結果表示沒有安裝：
-```shell
+```bash
 Unit ssh.service could not be found.
 ```
 
 ## 安裝 ssh
 
-``` shell
+```bash
 sudo apt update && sudo apt install ssh -y
 ```
 
 安裝完後執行 `systemctl status ssh` 檢查 ssh 服務狀態：
-```shell
+```bash
 ● ssh.service - OpenBSD Secure Shell server
      Loaded: loaded (/lib/systemd/system/ssh.service; enabled; vendor preset: enabled)
      Active: active (running) since Wed 2024-04-10 14:40:55 UTC; 35min ago
@@ -38,7 +38,7 @@ Warning: some journal files were not opened due to insufficient permissions.
 看到顯示active 表示成功啟用該服務。
 
 ## 查看 ip 位址
-``` shell
+```bash
 ip a
 
 # 或是

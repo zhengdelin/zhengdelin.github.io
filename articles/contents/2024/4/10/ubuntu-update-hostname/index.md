@@ -3,7 +3,7 @@
 在 Ubuntu 13 以前的版本，只能透過修改 `/etc/hostname` + 使用 `hostname` 指令才能修改主機名稱。
 在 Ubuntu 13 以後的版本可以透過 `hostnamectl` 的修改主機名稱，且不需要重新啟動系統。
 
-```shell
+```bash
 hostnamectl [OPTIONS...] COMMAND ...
 
 Query or change system hostname.
@@ -32,12 +32,12 @@ See the hostnamectl(1) man page for details.
 ```
 
 將主機名稱更改為 u22-1：
-``` shell
+```bash
 sudo hostnamectl set-hostname u22-1
 ```
 
 這時候不會立即產生變化，可以使用 `hostnamectl status` 查看有沒有成功
-``` shell
+```bash
  Static hostname: u22-1
        Icon name: computer-vm
          Chassis: vm

@@ -64,6 +64,11 @@ userlist_deny=NO # 當此設定為YES時，若某使用者帳號被列入名單�
 userlist_file=/etc/vsftpd.user_list
 ```
 
+設定完 config 之後記得重啟：
+```bash
+sudo systemctl restart vsftpd
+```
+
 ## 建立及設定 ftp 使用者
 
 使用 `adduser` 建立使用者

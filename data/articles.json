@@ -70,7 +70,7 @@
     "id": "jQuery-form-and-php",
     "title": "20240401 jQuery表單與後端交互",
     "date": "2024-04-01",
-    "tags": ["JavaScript"],
+    "tags": ["JavaScript", "PHP"],
     "categories": ["動態網頁設計"],
     "type": "md"
   },
@@ -111,6 +111,14 @@
     "filename": "函數.md"
   },
   {
+    "id": "php-readfile",
+    "title": "20240408 json格式的練習以採購訂單為例，php整批讀寫檔案跟逐行讀寫",
+    "date": "2024-04-08",
+    "tags": ["PHP"],
+    "categories": ["動態網頁設計"],
+    "type": "md"
+  },
+  {
     "id": "ubuntu-update-hostname",
     "title": "[Ubuntu 22.04] 使用 hostnamectl 修改主機名稱",
     "date": "2024-04-10",
@@ -144,7 +152,7 @@
     "id": "ubuntu-install-nginx、mysql、php",
     "title": "[Ubuntu 22.04] 安裝 Nginx、Mysql、PHP (LEMP)",
     "date": "2024-04-10",
-    "tags": ["Ubuntu"],
+    "tags": ["Ubuntu", "Nginx", "Mysql", "PHP"],
     "categories": ["Linux"],
     "type": "md",
     "mdConfig": {
@@ -205,9 +213,9 @@
   },
   {
     "id": "ubuntu-deploy-vuejs-php",
-    "title": "[Ubuntu 22.04] 部署前端 Vue.js、後端 PHP",
+    "title": "[Ubuntu 22.04] 部署前端 Vue.js、後端 php",
     "date": "2024-04-11",
-    "tags": ["Ubuntu"],
+    "tags": ["Ubuntu", "PHP", "Vuejs"],
     "categories": ["Linux"],
     "type": "md",
     "mdConfig": {

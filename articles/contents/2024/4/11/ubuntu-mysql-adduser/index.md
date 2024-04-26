@@ -20,7 +20,12 @@ mysql> CREATE USER your_user_name@localhost IDENTIFIED BY 'your_password';
 
 賦予使用者權限
 ```bash
-GRANT ALL PRIVILEGES ON *.* TO your_user_name@localhost
+mysql> GRANT ALL PRIVILEGES ON *.* TO your_user_name@localhost
+```
+
+使權限生效
+```bash
+mysql> FLUSH PRIVILEGES;
 ```
 
 

@@ -149,10 +149,10 @@ sudo ln -s /etc/nginx/sites-available/your_folder_name /etc/nginx/sites-enabled/
 接著使用 `sudo nginx -t` 檢查設定檔格式有沒有錯誤。
 最後使用 `sudo systemctl reload nginx` 重啟服務。
 
-將 `/var/www/your_folder_name` 的**資料夾以及底下所有檔案**，的權限設定至少為 **644**，請執行以下指令變更檔案權限</font>
+將 `/var/www/your_folder_name` 的**資料夾以及底下所有檔案**，的權限設定至少為 **755**，請執行以下指令變更檔案權限</font>
 
 ```bash
-sudo chmod 644 /var/www/your_folder_name -R
+sudo chmod 755 /var/www/your_folder_name -R
 ```
 
 這樣便已經部署完前端後端， `http://your_IP/` 為你的前端網址， `http://your_IP:8888` 為你的後端網址

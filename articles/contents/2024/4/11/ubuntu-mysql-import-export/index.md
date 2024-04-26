@@ -20,5 +20,5 @@ mysql> CREATE DATABASE your_db_name;
 
 ## 匯入整個資料庫
 ```bash
-mysql -u your_account -p your_db_name < source_file_name.sql
+sudo mysql -u your_account -p your_db_name < source_file_name.sql
 ```

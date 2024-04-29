@@ -1,0 +1,77 @@
+[
+  {
+    "order_id": 1,
+    "customer_id": 1,
+    "created_at": "2020-01-01 00:00:00",
+    "items": [
+      {
+        "product_id": 1,
+        "product_name": "手機",
+        "quantity": 2,
+        "specification": {
+          "storage": "128GB",
+          "ram": "6GB",
+          "color": "藍色"
+        }
+      },
+      {
+        "product_id": 2,
+        "product_name": "筆記型電腦",
+        "quantity": 1,
+        "specification": {
+          "storage": "512GB",
+          "ram": "8GB",
+          "color": "黑色"
+        }
+      }
+    ]
+  },
+  {
+    "order_id": 2,
+    "customer_id": 2,
+    "created_at": "2020-01-02 00:00:00",
+    "items": [
+      {
+        "product_id": 3,
+        "product_name": "平板電腦",
+        "quantity": 1,
+        "specification": {
+          "storage": "256GB",
+          "ram": "4GB",
+          "color": "白色"
+        }
+      },
+      {
+        "product_id": 4,
+        "product_name": "耳機",
+        "quantity": 3,
+        "specification": {
+          "color": "紅色"
+        }
+      }
+    ]
+  },
+  {
+    "order_id": 3,
+    "customer_id": 3,
+    "created_at": "2020-01-03 00:00:00",
+    "items": [
+      {
+        "product_id": 5,
+        "product_name": "智慧手錶",
+        "quantity": 1,
+        "specification": {
+          "color": "黑色"
+        }
+      },
+      {
+        "product_id": 6,
+        "product_name": "藍牙耳機",
+        "quantity": 2,
+        "specification": {
+          "color": "白色"
+        }
+      }
+    ]
+  }
+]

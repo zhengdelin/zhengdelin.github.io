@@ -285,5 +285,17 @@
     "tags": ["ShellScript"],
     "categories": ["Linux"],
     "type": "md"
+  },
+  {
+    "id": "js-php-ajax",
+    "title": "20240422 json格式檔案讀取並傳回前台，顯示在瑩幕上",
+    "date": "2024-04-22",
+    "tags": ["PHP", "JavaScript"],
+    "categories": ["動態網頁設計"],
+    "asIframe": true,
+    "iframeAttrs": {
+      "width": "100%",
+      "height": "800px"
+    }
   }
 ]

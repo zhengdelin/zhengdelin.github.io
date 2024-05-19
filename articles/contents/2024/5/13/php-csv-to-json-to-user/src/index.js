@@ -32,7 +32,7 @@ function createTableRows(data) {
 }
 
 window.addEventListener("DOMContentLoaded", () => {
-  fetch("./get.php", { method: "GET" }).then(async (response) => {
+  fetch("./get_foods.php", { method: "GET" }).then(async (response) => {
     const data = await response.json();
     createTableRows(data);
   });
